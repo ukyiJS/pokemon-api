@@ -74,5 +74,6 @@ type PokemonOfDatabase {
 }
 
 type Query {
-  getPokemons(display: Int, page: Int): [PokemonOfDatabase!]!
+  getPokemons(display: Float, page: Float): [PokemonOfDatabase!]!
+  getAutoCompleteKeyword(display: Float, page: Float, keyword: String!): [String!]!
 }
