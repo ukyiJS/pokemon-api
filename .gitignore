@@ -40,4 +40,4 @@ yarn.lock
 # env file
 .env
 .env.*
-env.json
+env.*.json
