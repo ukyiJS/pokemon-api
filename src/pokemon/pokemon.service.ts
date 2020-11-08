@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { assemble, disassemble, isConsonantAll, search } from 'hangul-js';
 import { MongoRepository } from 'typeorm';
 import { PokemonOfDatabase } from './model/pokemonOfDatabase.entity';
 
 @Injectable()
 export class PokemonService {
+  private pokemonNames: string[];
+  private searchKeyword: string;
+
   constructor(
     @InjectRepository(PokemonOfDatabase) private readonly pokemonRepository: MongoRepository<PokemonOfDatabase>,
   ) {}
@@ -15,6 +19,14 @@ export class PokemonService {
       take: display,
       order: { no: 'ASC' },
       cache: true,
+    });
+  }
+
+  private filterByChoSeong(): string[] {
+    return this.pokemonNames.filter(keywordToFilter => {
+      const choSeongKeyword = [...keywordToFilter].map(text => disassemble(text)[0]).join('');
+      const disassembleKeyword = disassemble(this.searchKeyword).join('');
+      return search(choSeongKeyword, disassembleKeyword) > -1;
     });
   }
 }
