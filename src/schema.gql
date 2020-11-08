@@ -46,6 +46,33 @@ type DifferentForm {
   differentForm: [DifferentForm!]!
 }
 
+type PokemonOfDatabase {
+  _id: String!
+  no: String!
+  name: String!
+  engName: String!
+  image: String!
+  stats: [Stat!]!
+  types: [String!]!
+  typeDefenses: [TypeDefense!]!
+  species: String!
+  height: String!
+  weight: String!
+  abilities: [String!]!
+  hiddenAbility: String
+  evYield: String
+  catchRate: Int!
+  friendship: Int!
+  exp: Int!
+  eegGroups: [String!]!
+  gender: [Gender!]!
+  eggCycles: EggCycle!
+  form: String
+  differentForm: [DifferentForm!]!
+  createdAt: Float!
+  searchCount: Int!
+}
+
 type Query {
-  getHello: String!
+  getPokemons(display: Int, page: Int): [PokemonOfDatabase!]!
 }
