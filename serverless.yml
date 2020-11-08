@@ -12,10 +12,10 @@ provider:
     SERVICE: ${self:service}
     STAGE: ${self:provider.stage}
     REGION: ${self:provider.region}
-    MONGODB_ATLAS_USER: ${self:custom.env.MONGODB_ATLAS_USER}
-    MONGODB_ATLAS_PASS: ${self:custom.env.MONGODB_ATLAS_PASS}
-    MONGODB_ATLAS_HOST: ${self:custom.env.MONGODB_ATLAS_HOST}
-    MONGODB_ATLAS_DATABASE: ${self:custom.env.MONGODB_ATLAS_DATABASE}
+    MONGODB_USER: ${self:custom.env.MONGODB_USER}
+    MONGODB_PASS: ${self:custom.env.MONGODB_PASS}
+    MONGODB_HOST: ${self:custom.env.MONGODB_HOST}
+    MONGODB_DATABASE: ${self:custom.env.MONGODB_DATABASE}
     MODE: 'serverless'
 
 plugins: # Serverless 플러그인
