@@ -1,0 +1,48 @@
+service: pokemon-api
+
+provider:
+  name: aws # aws, azure 등 Vendor 지정
+  runtime: nodejs12.x # 사용 언어
+  stage: ${opt:stage,'api'} # stage 명
+  region: ap-northeast-2 # ap-northeast-1 (도쿄), ap-northeast-2 (서울)
+  stackName: pokemon # CloudFormation stack 명
+  apiName: pokemon #  API Gateway 명
+  environment: # lambda에서 사용될 공통 환경변수
+    NODE_ENV: ${self:custom.env.NODE_ENV}
+    SERVICE: ${self:service}
+    STAGE: ${self:provider.stage}
+    REGION: ${self:provider.region}
+    MONGODB_ATLAS_USER: ${self:custom.env.MONGODB_ATLAS_USER}
+    MONGODB_ATLAS_PASS: ${self:custom.env.MONGODB_ATLAS_PASS}
+    MONGODB_ATLAS_HOST: ${self:custom.env.MONGODB_ATLAS_HOST}
+    MONGODB_ATLAS_DATABASE: ${self:custom.env.MONGODB_ATLAS_DATABASE}
+    MODE: 'serverless'
+
+plugins: # Serverless 플러그인
+  - serverless-offline
+  - serverless-aws-alias
+
+package:
+  exclude:
+    - .git/**
+    - src/**
+    - test/**
+    - e2e/**
+    - README.md
+
+functions: # lambda 함수 리스트
+  index: # lambda 함수
+    handler: dist/index.handler # lambda 함수 위치
+    name: pokemon # lambda 함수 명
+    events: # lambda 이벤트
+      - http: # API Gateway
+          path: '{proxy+}' # URI Path
+          method: any # HTTP Method
+          cors: true # CORS Enable
+      - http:
+          path: '/'
+          method: any
+          cors: true
+
+custom:
+  env: ${file(src/env.${opt:alias,'prod'}.json)} # CLI 입력시 --alias `alias 명` 에 따라 config 파일을 다르게 불러옴. 불러운 변수는 위의 provider.environment 에서 씀
