@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PokemonOfDatabase } from './model/pokemonOfDatabase.entity';
+import { PokemonController } from './pokemon.controller';
 import { PokemonResolver } from './pokemon.resolver';
 import { PokemonService } from './pokemon.service';
 
@@ -8,5 +9,6 @@ import { PokemonService } from './pokemon.service';
   providers: [PokemonService, PokemonResolver],
   imports: [TypeOrmModule.forFeature([PokemonOfDatabase])],
   exports: [PokemonService],
+  controllers: [PokemonController],
 })
 export class PokemonModule {}
