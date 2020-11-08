@@ -1,24 +1,34 @@
 import { AppModule } from '@/app.module';
 import { INestApplication } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
+import { ObjectLiteral } from 'typeorm';
 
-describe('AppController (e2e)', () => {
+describe('App (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+    const moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
+  }, 30000);
+
+  afterAll(async () => {
+    await app.close();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+  describe('GraphQL (e2e)', () => {
+    const Query = (query: string, variables?: ObjectLiteral) =>
+      request(app.getHttpServer())
+        .post('/graphql')
+        .send({
+          variables,
+          query,
+        })
+        .expect(200)
+        .then(({ body: { data } }) => expect(Object.values(data)).not.toHaveLength(0));
   });
 });
