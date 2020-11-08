@@ -13,4 +13,13 @@ export class PokemonResolver {
   ): Promise<PokemonOfDatabase[]> {
     return this.pokemonService.getPokemons(page, display);
   }
+
+  @Query(() => [String])
+  public async getAutoCompleteKeyword(
+    @Args('keyword') keyword: string,
+    @Args('page', { type: () => Int, nullable: true }) page?: number,
+    @Args('display', { type: () => Int, nullable: true }) display?: number,
+  ): Promise<string[]> {
+    return this.pokemonService.getAutoCompleteKeyword(keyword, page, display);
+  }
 }
