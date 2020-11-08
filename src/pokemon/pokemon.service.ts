@@ -29,4 +29,10 @@ export class PokemonService {
       return search(choSeongKeyword, disassembleKeyword) > -1;
     });
   }
+
+  private filterByKeyword(): string[] {
+    return this.pokemonNames.filter(keywordToFilter => {
+      return search(keywordToFilter, this.searchKeyword) > -1;
+    });
+  }
 }
