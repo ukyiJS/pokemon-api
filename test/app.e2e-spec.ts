@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
 import { ObjectLiteral } from 'typeorm';
+import { getPokemonsQuery } from './query';
 
 describe('App (e2e)', () => {
   let app: INestApplication;
@@ -30,5 +31,9 @@ describe('App (e2e)', () => {
         })
         .expect(200)
         .then(({ body: { data } }) => expect(Object.values(data)).not.toHaveLength(0));
+
+    it('should return pokemons', async () => {
+      await Query(getPokemonsQuery);
+    });
   });
 });
