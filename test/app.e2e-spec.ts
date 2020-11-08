@@ -30,10 +30,11 @@ describe('App (e2e)', () => {
           query,
         })
         .expect(200)
-        .then(({ body: { data } }) => expect(Object.values(data)).not.toHaveLength(0));
+        .then(({ body: { data } }) => data);
 
     it('should return pokemons', async () => {
-      await Query(getPokemonsQuery);
+      const { getPokemons } = await Query(getPokemonsQuery);
+      expect(getPokemons).not.toHaveLength(0);
     });
   });
 });
