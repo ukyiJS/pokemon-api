@@ -1,8 +1,8 @@
-import { AppModule } from '@/app.module';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import * as request from 'supertest';
+import request from 'supertest';
 import { ObjectLiteral } from 'typeorm';
+import { AppModule } from '../src/app.module';
 import { getPokemonsQuery } from './query';
 
 describe('App (e2e)', () => {
