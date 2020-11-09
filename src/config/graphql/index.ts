@@ -1,5 +1,5 @@
 import { IS_OFFLINE, IS_PRODUCTION } from '@/env';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { GqlModuleOptions, GqlOptionsFactory } from '@nestjs/graphql';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { join } from 'path';
@@ -7,11 +7,11 @@ import { ObjectLiteral } from 'typeorm';
 
 @Injectable()
 export class GraphqlService implements GqlOptionsFactory {
-  private readonly isProduction = IS_PRODUCTION && !IS_OFFLINE;
+  private readonly endpoint = '/api/graphql';
   private options: GqlModuleOptions;
 
   constructor() {
-    this.options = this.isProduction ? this.getProdOptions() : this.getDevOptions();
+    this.options = IS_PRODUCTION ? this.getProdOptions() : this.getDevOptions();
   }
 
   private getProdOptions = (): GqlModuleOptions => ({
@@ -20,6 +20,7 @@ export class GraphqlService implements GqlOptionsFactory {
   });
 
   private getDevOptions = (): GqlModuleOptions => ({
+    path: !IS_OFFLINE ? this.endpoint : undefined,
     autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     tracing: true,
   });
@@ -28,7 +29,7 @@ export class GraphqlService implements GqlOptionsFactory {
     return {
       ...this.options,
       cors: true,
-      playground: true,
+      playground: { endpoint: this.endpoint },
       introspection: true,
       formatError: (error: GraphQLError): GraphQLFormattedError & ObjectLiteral => ({
         message: error.message,
