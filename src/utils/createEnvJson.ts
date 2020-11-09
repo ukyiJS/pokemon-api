@@ -1,13 +1,4 @@
-import {
-  DOMAIN,
-  IS_PRODUCTION,
-  MONGODB_DATABASE,
-  MONGODB_HOST,
-  MONGODB_PASS,
-  MONGODB_PORT,
-  MONGODB_USER,
-  NODE_ENV,
-} from '@/env';
+import { DOMAIN, MONGODB_DATABASE, MONGODB_HOST, MONGODB_PASS, MONGODB_PORT, MONGODB_USER, NODE_ENV } from '../env';
 import { writeJson } from './json';
 
 writeJson({
@@ -20,5 +11,5 @@ writeJson({
     MONGODB_HOST,
     MONGODB_DATABASE,
   },
-  fileName: `env.${IS_PRODUCTION ? 'prod' : 'dev'}`,
+  fileName: 'env',
 });
