@@ -1,5 +1,5 @@
 import { IS_OFFLINE, IS_PRODUCTION } from '@/env';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { GqlModuleOptions, GqlOptionsFactory } from '@nestjs/graphql';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { join } from 'path';
