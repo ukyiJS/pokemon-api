@@ -1,23 +1,29 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { APIGatewayProxyEvent, Context, ProxyResult } from 'aws-lambda';
-import * as awsServerlessExpress from 'aws-serverless-express';
-import * as express from 'express';
+import { createServer, proxy } from 'aws-serverless-express';
+import { eventContext } from 'aws-serverless-express/middleware';
+import express from 'express';
 import { Server } from 'http';
-import { from } from 'rxjs';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter, LoggingInterceptor, TimeoutInterceptor } from './common';
 
-const createServer = async (): Promise<Server> => {
+let cachedServer: Server;
+
+const bootstrapServer = async (): Promise<Server> => {
   const expressApp = express();
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp), { cors: true });
+  expressApp.use(eventContext());
+  const app = (await NestFactory.create(AppModule, new ExpressAdapter(expressApp), { cors: true }))
+    .useGlobalFilters(new HttpExceptionFilter())
+    .useGlobalInterceptors(new LoggingInterceptor(), new TimeoutInterceptor())
+    .useGlobalPipes(new ValidationPipe({ forbidUnknownValues: true }));
   await app.init();
 
-  return awsServerlessExpress.createServer(expressApp);
+  return createServer(expressApp);
 };
 
-const server = from(createServer());
-
 export const handler = async (event: APIGatewayProxyEvent, context: Context): Promise<ProxyResult> => {
-  const handler = await server.toPromise();
-  return awsServerlessExpress.proxy(handler, event, context, 'PROMISE').promise;
+  if (!cachedServer) cachedServer = await bootstrapServer();
+  return proxy(cachedServer, event, context, 'PROMISE').promise;
 };
