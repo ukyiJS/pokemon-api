@@ -1,7 +1,7 @@
-import { MONGODB_URL } from '@/env';
 import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { join } from 'path';
+import { MONGODB_URL } from '../../env';
 
 @Injectable()
 export class TypeormService implements TypeOrmOptionsFactory {
