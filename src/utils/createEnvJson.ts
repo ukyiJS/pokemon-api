@@ -4,13 +4,12 @@ import {
   MONGODB_DATABASE,
   MONGODB_HOST,
   MONGODB_PASS,
-  MONGODB_USER,
   MONGODB_PORT,
+  MONGODB_USER,
   NODE_ENV,
 } from '@/env';
 import { writeJson } from './json';
 
-const fileName = `env.${IS_PRODUCTION ? 'prod' : 'dev'}`;
 writeJson({
   data: {
     NODE_ENV,
@@ -21,6 +20,5 @@ writeJson({
     MONGODB_HOST,
     MONGODB_DATABASE,
   },
-  fileName,
-  dirName: 'src',
+  fileName: `env.${IS_PRODUCTION ? 'prod' : 'dev'}`,
 });
