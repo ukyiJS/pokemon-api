@@ -1,8 +1,8 @@
-import { CacheService, GraphqlService, TypeormService } from '@/config';
 import { CacheModule, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
+import { CacheService, GraphqlService, TypeormService } from './config';
 import { PokemonModule } from './pokemon/pokemon.module';
 
 @Module({
