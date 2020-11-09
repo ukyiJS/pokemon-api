@@ -41,3 +41,6 @@ yarn.lock
 .env
 .env.*
 env.*.json
+
+# serverless files
+.serverless
