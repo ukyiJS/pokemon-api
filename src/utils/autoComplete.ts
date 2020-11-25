@@ -7,11 +7,6 @@ export class AutoCompleteUtil {
 
   constructor(private readonly pokemonNames: PokemonNames) {}
 
-  constructor(
-    private readonly pokemonRepository: MongoRepository<PokemonOfDatabase>,
-    private readonly cacheManager: CacheStore,
-  ) {}
-
   public getSearchType = (): SearchType => this.searchType;
 
   private equals = (searchText: string, regExp: string): boolean => {
