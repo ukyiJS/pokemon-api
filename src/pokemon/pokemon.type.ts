@@ -9,3 +9,8 @@ export type PokemonNames = {
   eng: string[];
   count: number[];
 };
+
+export type AutoCompleteKeyword = {
+  result: string;
+  count: number;
+};
