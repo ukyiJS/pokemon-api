@@ -1,5 +1,6 @@
-import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { FindAndModifyWriteOpResultObject } from 'typeorm';
+import { AutoCompleteArgs } from './args/autoComplete.args';
 import { PagingArgs } from './args/paging.args';
 import { PokemonOfDatabase } from './model/pokemonOfDatabase.entity';
 import { PokemonService } from './pokemon.service';
@@ -19,10 +20,7 @@ export class PokemonResolver {
   }
 
   @Query(() => [String])
-  public async getAutoCompleteKeyword(
-    @Args('keyword') keyword: string,
-    @Args('display', { type: () => Int, nullable: true }) display?: number,
-  ): Promise<string[]> {
-    return this.pokemonService.getAutoCompleteKeyword(keyword, display);
+  public async getAutoCompleteKeyword(@Args() autoCompleteArgs: AutoCompleteArgs): Promise<string[]> {
+    return this.pokemonService.getAutoCompleteKeyword(autoCompleteArgs);
   }
 }
