@@ -31,12 +31,14 @@ export class AutoCompleteUtil {
     });
   };
 
-  public getMatchedTexts = async (keyword: string): Promise<string[]> => {
-    await this.initAutoCompleteKeyword();
-    this.searchType = /^[ㄱ-ㅎ가-힣]/.test(keyword) ? SearchTypes.NAME : SearchTypes.ENG_NAME;
+  public getAutoCompleteKeyword = (keyword: string): AutoCompleteKeyword[] => {
+    this.searchType = /^[ㄱ-ㅎ가-힣]/.test(keyword) ? SearchTypes.KOR : SearchTypes.ENG;
     this.searchKeyword = assemble(disassemble(keyword));
 
     const matchedTexts = isConsonantAll(keyword) ? this.filterByChoSeong() : this.filterByKeyword();
-    return matchedTexts;
+    return matchedTexts.map(result => {
+      const index = this.pokemonNames[this.searchType].findIndex(name => name === result);
+      return { result, count: this.pokemonNames.count[index] };
+    });
   };
 }
