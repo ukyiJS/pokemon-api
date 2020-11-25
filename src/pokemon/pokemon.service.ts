@@ -31,7 +31,7 @@ export class PokemonService {
     });
   }
 
-  public async getAutoCompleteKeyword(keyword: string, display = 10): Promise<string[]> {
+  public async getAutoCompleteKeyword({ keyword, display }: AutoCompleteArgs): Promise<string[]> {
     if (!this.pokemonNames?.kor) {
       const pokemons = await this.pokemonRepository.find({
         select: ['name', 'engName', 'searchCount'],
