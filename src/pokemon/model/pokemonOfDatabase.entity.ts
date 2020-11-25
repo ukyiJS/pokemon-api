@@ -1,7 +1,5 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { Expose, plainToClass } from 'class-transformer';
+import { ObjectType } from '@nestjs/graphql';
 import { Column, Entity, ObjectIdColumn } from 'typeorm';
-import { v4 } from 'uuid';
 import { IPokemonOfDatabase } from '../pokemon.interface';
 import { DifferentForm } from './differentForm.entity';
 import { EggCycle } from './eggCycle.entity';
