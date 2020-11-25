@@ -17,6 +17,8 @@ export class AutoCompleteUtil {
     return new RegExp(`^${regExp}`, 'gi').test(searchText);
   };
 
+  private disassembleText = (text: string) => disassemble(text).join('');
+
   private initAutoCompleteKeyword = async (select: (keyof PokemonOfDatabase)[]): Promise<void> => {
     if (this.pokemonNoList && this.pokemonNames && this.pokemonEngNames) return;
 
