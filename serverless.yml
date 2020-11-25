@@ -31,7 +31,7 @@ package:
 
 functions: # lambda 함수 리스트
   pokemon: # lambda 함수
-    handler: src/index.handler # lambda 함수 위치
+    handler: src/lambda.handler # lambda 함수 위치
     name: pokemon # lambda 함수 명
     events: # lambda 이벤트
       - http: # API Gateway
