@@ -14,79 +14,55 @@ import { TypeDefense } from './typeDefense.entity';
 @ObjectType({ implements: () => [IPokemonOfDatabase] })
 export class PokemonOfDatabase implements IPokemonOfDatabase {
   @ObjectIdColumn()
-  _id?: string;
-
+  public _id?: string;
   @Column({ unique: true })
-  no: string;
-
+  public no: string;
   @Column()
-  name: string;
+  public name: string;
   @Column()
-  engName: string;
-
+  public engName: string;
   @Column()
-  image: string;
-
+  public image: string;
   @Column()
-  icon: string;
-
+  public icon: string;
   @Column()
-  stats: Stat[];
-
+  public stats: Stat[];
   @Column()
-  types: string[];
-
+  public types: string[];
   @Column()
-  typeDefenses: TypeDefense[];
-
+  public typeDefenses: TypeDefense[];
   @Column()
-  species: string;
-
+  public species: string;
   @Column()
-  height: string;
-
+  public height: string;
   @Column()
-  weight: string;
-
+  public weight: string;
   @Column()
-  abilities: string[];
-
+  public abilities: string[];
   @Column()
-  hiddenAbility: string;
-
+  public hiddenAbility: string;
   @Column()
-  evYield: string;
-
+  public evYield: string;
   @Column()
-  catchRate: number;
-
+  public catchRate: number;
   @Column()
-  friendship: number;
-
+  public friendship: number;
   @Column()
-  exp: number;
-
+  public exp: number;
   @Column()
-  eegGroups: string[];
-
+  public eegGroups: string[];
   @Column()
-  gender: Gender[];
-
+  public gender: Gender[];
   @Column()
-  eggCycles: EggCycle;
-
+  public eggCycles: EggCycle;
   @Column()
-  form: string;
-
+  public form: string;
   @Column()
-  evolvingTo: EvolvingTo[];
-
+  public evolvingTo: EvolvingTo[];
   @Column()
-  differentForm: DifferentForm[];
-
+  public differentForm: DifferentForm[];
   @Column()
-  createdAt: number;
-
+  public createdAt: number;
   @Column()
-  searchCount: number;
+  public searchCount: number;
 }
