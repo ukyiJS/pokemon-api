@@ -1,3 +1,4 @@
+import { CacheStore, Logger } from '@nestjs/common';
 import { assemble, disassemble, isConsonantAll } from 'hangul-js';
 import { MongoRepository } from 'typeorm';
 import { PokemonOfDatabase } from '../pokemon/model/pokemonOfDatabase.entity';
@@ -9,7 +10,10 @@ export class AutoCompleteUtil {
   private searchKeyword: string;
   private searchType: SearchType;
 
-  constructor(private readonly pokemonRepository: MongoRepository<PokemonOfDatabase>) {}
+  constructor(
+    private readonly pokemonRepository: MongoRepository<PokemonOfDatabase>,
+    private readonly cacheManager: CacheStore,
+  ) {}
 
   public getSearchType = (): SearchType => this.searchType;
 
@@ -22,7 +26,7 @@ export class AutoCompleteUtil {
   private initAutoCompleteKeyword = async (): Promise<void> => {
     if (this.pokemonNames && this.pokemonEngNames) return;
 
-    const pokemons = await this.pokemonRepository.find({ select: ['name', 'engName'] });
+    const pokemons = await this.pokemonRepository.find({ select: ['name', 'engName'], cache: true });
     const [names, engNames] = pokemons.reduce<string[][]>(
       ([accName, accEngName], { name, engName }) => {
         return [
@@ -32,8 +36,10 @@ export class AutoCompleteUtil {
       },
       [[], []],
     );
-    this.pokemonNames = names;
-    this.pokemonEngNames = engNames;
+    await this.cacheManager.set('pokemonNames', names, { ttl: 50000 });
+    await this.cacheManager.set('pokemonEngNames', engNames, { ttl: 50000 });
+    this.pokemonNames = (await this.cacheManager.get<string[]>('pokemonNames'))!;
+    this.pokemonEngNames = (await this.cacheManager.get<string[]>('pokemonEngNames'))!;
   };
 
   private filterByChoSeong = (): string[] => {
