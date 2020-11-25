@@ -2,6 +2,8 @@ import { CacheStore, CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindAndModifyWriteOpResultObject, MongoRepository } from 'typeorm';
 import { AutoCompleteUtil } from '../utils/autoComplete';
+import { AutoCompleteArgs } from './args/autoComplete.args';
+import { PagingArgs } from './args/paging.args';
 import { PokemonOfDatabase } from './model/pokemonOfDatabase.entity';
 import { PokemonNames } from './pokemon.type';
 
@@ -20,7 +22,7 @@ export class PokemonService {
       .then(({ value }) => value);
   }
 
-  public async getPokemons(page = 1, display = 10): Promise<PokemonOfDatabase[]> {
+  public async getPokemons({ page, display }: PagingArgs): Promise<PokemonOfDatabase[]> {
     return this.pokemonRepository.find({
       skip: (page - 1) * display,
       take: display,
