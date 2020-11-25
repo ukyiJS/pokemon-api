@@ -1,4 +1,5 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Logger } from '@nestjs/common';
+import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { FindAndModifyWriteOpResultObject } from 'typeorm';
 import { AutoCompleteArgs } from './args/autoComplete.args';
 import { PokemonArgs } from './args/pokemon.args';
@@ -17,6 +18,11 @@ export class PokemonResolver {
   @Query(() => [PokemonOfDatabase])
   public async getPokemons(@Args({ nullable: true }) pokemonArgs: PokemonArgs): Promise<PokemonOfDatabase[]> {
     return this.pokemonService.getPokemons(pokemonArgs);
+  }
+
+  @ResolveField(() => [String])
+  public abilities(@Parent() { abilities }: PokemonOfDatabase): string[] {
+    return abilities.filter(ability => ability);
   }
 
   @Query(() => [String])
