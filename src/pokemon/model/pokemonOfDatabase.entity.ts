@@ -38,9 +38,7 @@ export class PokemonOfDatabase implements IPokemonOfDatabase {
   @Column()
   public weight: string;
   @Column()
-  public abilities: string[];
-  @Column()
-  public hiddenAbility: string;
+  public abilities: (string | null)[];
   @Column()
   public evYield: string;
   @Column()
