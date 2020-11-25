@@ -15,8 +15,8 @@ export class EvolvingTo implements IEvolvingTo {
   @Field({ nullable: true })
   form: string;
 
-  @Field()
-  condition: string;
+  @Field({ nullable: true })
+  condition?: string;
 
   @Field(() => [EvolvingTo])
   evolvingTo: EvolvingTo[];
