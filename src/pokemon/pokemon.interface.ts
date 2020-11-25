@@ -78,8 +78,11 @@ export abstract class IPokemonOfDatabase {
   @Field()
   weight: string;
 
-  @Field(() => [String])
-  abilities: (string | null)[];
+  @Field(() => [String], { nullable: true })
+  abilities: string[];
+
+  @Field({ nullable: true })
+  hiddenAbility: string;
 
   @Field({ nullable: true })
   evYield: string;
