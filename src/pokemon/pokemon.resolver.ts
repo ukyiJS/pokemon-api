@@ -20,6 +20,11 @@ export class PokemonResolver {
     return this.pokemonService.getPokemons(pokemonArgs);
   }
 
+  @ResolveField(() => String, { nullable: true })
+  public async hiddenAbility(@Parent() { abilities }: PokemonOfDatabase): Promise<string> {
+    return abilities[2];
+  }
+
   @ResolveField(() => [String])
   public abilities(@Parent() { abilities }: PokemonOfDatabase): string[] {
     return abilities.filter(ability => ability);
