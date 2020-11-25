@@ -1,5 +1,5 @@
 import { assemble, disassemble, isConsonantAll } from 'hangul-js';
-import { PokemonNames, SearchType, SearchTypes } from '../pokemon/pokemon.type';
+import { AutoCompleteKeyword, PokemonNames, SearchType, SearchTypes } from '../pokemon/pokemon.type';
 
 export class AutoCompleteUtil {
   private searchKeyword: string;
@@ -14,25 +14,6 @@ export class AutoCompleteUtil {
   };
 
   private disassembleText = (text: string) => disassemble(text).join('');
-
-  private initAutoCompleteKeyword = async (): Promise<void> => {
-    if (this.pokemonNames && this.pokemonEngNames) return;
-
-    const pokemons = await this.pokemonRepository.find({ select: ['name', 'engName'], cache: true });
-    const [names, engNames] = pokemons.reduce<string[][]>(
-      ([accName, accEngName], { name, engName }) => {
-        return [
-          [...accName, name],
-          [...accEngName, engName],
-        ];
-      },
-      [[], []],
-    );
-    await this.cacheManager.set('pokemonNames', names, { ttl: 50000 });
-    await this.cacheManager.set('pokemonEngNames', engNames, { ttl: 50000 });
-    this.pokemonNames = (await this.cacheManager.get<string[]>('pokemonNames'))!;
-    this.pokemonEngNames = (await this.cacheManager.get<string[]>('pokemonEngNames'))!;
-  };
 
   private filterByChoSeong = (): string[] => {
     return this.pokemonNames.filter(name => {
