@@ -1,4 +1,3 @@
-import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { APIGatewayProxyEvent, Context, ProxyResult } from 'aws-lambda';
@@ -7,17 +6,13 @@ import { eventContext } from 'aws-serverless-express/middleware';
 import express from 'express';
 import { Server } from 'http';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter, LoggingInterceptor, TimeoutInterceptor } from './common';
 
 let cachedServer: Server;
 
 const bootstrapServer = async (): Promise<Server> => {
   const expressApp = express();
   expressApp.use(eventContext());
-  const app = (await NestFactory.create(AppModule, new ExpressAdapter(expressApp), { cors: true }))
-    .useGlobalFilters(new HttpExceptionFilter())
-    .useGlobalInterceptors(new LoggingInterceptor(), new TimeoutInterceptor())
-    .useGlobalPipes(new ValidationPipe({ forbidUnknownValues: true }));
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp), { cors: true });
   await app.init();
 
   return createServer(expressApp);
