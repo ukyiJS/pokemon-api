@@ -1,13 +1,13 @@
 import { assemble, disassemble, isConsonantAll } from 'hangul-js';
 import { MongoRepository } from 'typeorm';
 import { PokemonOfDatabase } from '../pokemon/model/pokemonOfDatabase.entity';
-import { MatchedTexts, SearchType, SearchTypes } from '../pokemon/pokemon.type';
+import { SearchType, SearchTypes } from '../pokemon/pokemon.type';
 
 export class AutoCompleteUtil {
-  private pokemonNoList: string[];
   private pokemonNames: string[];
   private pokemonEngNames: string[];
   private searchKeyword: string;
+  private searchType: SearchType;
 
   constructor(private readonly pokemonRepository: MongoRepository<PokemonOfDatabase>) {}
 
