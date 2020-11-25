@@ -19,21 +19,19 @@ export class AutoCompleteUtil {
 
   private disassembleText = (text: string) => disassemble(text).join('');
 
-  private initAutoCompleteKeyword = async (select: (keyof PokemonOfDatabase)[]): Promise<void> => {
-    if (this.pokemonNoList && this.pokemonNames && this.pokemonEngNames) return;
+  private initAutoCompleteKeyword = async (): Promise<void> => {
+    if (this.pokemonNames && this.pokemonEngNames) return;
 
-    const pokemons = await this.pokemonRepository.find({ select });
-    const [noList, names, engNames] = pokemons.reduce<string[][]>(
-      ([_no, _name, _engName], { no, name, engName }) => {
+    const pokemons = await this.pokemonRepository.find({ select: ['name', 'engName'] });
+    const [names, engNames] = pokemons.reduce<string[][]>(
+      ([accName, accEngName], { name, engName }) => {
         return [
-          [..._no, no],
-          [..._name, name],
-          [..._engName, engName],
+          [...accName, name],
+          [...accEngName, engName],
         ];
       },
-      [[], [], []],
+      [[], []],
     );
-    this.pokemonNoList = noList;
     this.pokemonNames = names;
     this.pokemonEngNames = engNames;
   };
