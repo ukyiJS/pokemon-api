@@ -3,7 +3,7 @@ import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
-import { HttpExceptionFilter, LoggingInterceptor } from './common';
+import { HttpExceptionFilter, LoggingInterceptor, TimeoutInterceptor } from './common';
 import { GraphqlService, TypeormService } from './config';
 import { PokemonModule } from './pokemon/pokemon.module';
 
@@ -12,6 +12,7 @@ import { PokemonModule } from './pokemon/pokemon.module';
     { provide: APP_PIPE, useClass: ValidationPipe },
     { provide: APP_FILTER, useClass: HttpExceptionFilter },
     { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: TimeoutInterceptor },
   ],
   imports: [
     GraphQLModule.forRootAsync({ useClass: GraphqlService }),
