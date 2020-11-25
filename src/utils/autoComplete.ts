@@ -53,19 +53,12 @@ export class AutoCompleteUtil {
     });
   };
 
-  public getMatchedTexts = async (keyword: string): Promise<MatchedTexts> => {
-    const select = <(keyof PokemonOfDatabase)[]>['no', 'name', 'engName'];
-
-    let searchType = <SearchType>'';
-    if (/^[0-9]/.test(keyword)) searchType = SearchTypes.NO;
-    else if (/^[ㄱ-ㅎ가-힣]/.test(keyword)) searchType = SearchTypes.NAME;
-    else searchType = SearchTypes.ENG_NAME;
-
-    await this.initAutoCompleteKeyword(select);
-
+  public getMatchedTexts = async (keyword: string): Promise<string[]> => {
+    await this.initAutoCompleteKeyword();
+    this.searchType = /^[ㄱ-ㅎ가-힣]/.test(keyword) ? SearchTypes.NAME : SearchTypes.ENG_NAME;
     this.searchKeyword = assemble(disassemble(keyword));
-    const matchedTexts = isConsonantAll(keyword) ? this.filterByChoSeong() : this.filterByKeyword(searchType);
 
-    return { matchedTexts, searchType };
+    const matchedTexts = isConsonantAll(keyword) ? this.filterByChoSeong() : this.filterByKeyword();
+    return matchedTexts;
   };
 }
