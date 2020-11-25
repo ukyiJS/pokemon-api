@@ -14,6 +14,14 @@ export class PokemonService {
     @Inject(CACHE_MANAGER) private readonly cacheManager: CacheStore,
   ) {}
 
+  public async getPokemon(pokemonName: string): Promise<PokemonOfDatabase | null> {
+    const result = await this.pokemonRepository.findOne({
+      where: { name: pokemonName },
+      cache: true,
+    });
+    return result ?? null;
+  }
+
   public async getPokemons(page = 1, display = 10): Promise<PokemonOfDatabase[]> {
     return this.pokemonRepository.find({
       skip: (page - 1) * display,
