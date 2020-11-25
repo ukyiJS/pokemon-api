@@ -37,10 +37,10 @@ export class AutoCompleteUtil {
   };
 
   private filterByChoSeong = (): string[] => {
-    return this.pokemonNames.filter(keywordToFilter => {
-      const choSeongKeyword = [...keywordToFilter].map(text => disassemble(text)[0]).join('');
-      const disassembleKeyword = disassemble(this.searchKeyword).join('');
-      return this.equals(choSeongKeyword, disassembleKeyword);
+    return this.pokemonNames.filter(name => {
+      const choSeongKeyword = [...name].map(text => disassemble(text)[0]).join('');
+      const searchKeyword = this.disassembleText(this.searchKeyword);
+      return this.equals(choSeongKeyword, searchKeyword);
     });
   };
 
