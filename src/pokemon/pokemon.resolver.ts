@@ -1,13 +1,14 @@
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { FindAndModifyWriteOpResultObject } from 'typeorm';
 import { PokemonOfDatabase } from './model/pokemonOfDatabase.entity';
 import { PokemonService } from './pokemon.service';
 
-@Resolver()
+@Resolver(() => PokemonOfDatabase)
 export class PokemonResolver {
   constructor(private readonly pokemonService: PokemonService) {}
 
   @Query(() => PokemonOfDatabase, { nullable: true })
-  public async getPokemon(@Args('pokemonName') pokemonName: string): Promise<PokemonOfDatabase | null> {
+  public async getPokemon(@Args('pokemonName') pokemonName: string): Promise<FindAndModifyWriteOpResultObject> {
     return this.pokemonService.getPokemon(pokemonName);
   }
 
