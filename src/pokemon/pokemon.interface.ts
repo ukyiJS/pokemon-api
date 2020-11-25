@@ -37,6 +37,7 @@ export interface IPokemonOfDatabase {
   name: string;
   engName: string;
   image: string;
+  icon?: string;
   stats: IStat[];
   types: string[];
   typeDefenses: ITypeDefense[];
