@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { CacheStore, CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { AutoCompleteUtil } from '../utils/autoComplete';
@@ -8,6 +8,7 @@ import { PokemonOfDatabase } from './model/pokemonOfDatabase.entity';
 export class PokemonService {
   constructor(
     @InjectRepository(PokemonOfDatabase) private readonly pokemonRepository: MongoRepository<PokemonOfDatabase>,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: CacheStore,
   ) {}
 
   public async getPokemons(page = 1, display = 10): Promise<PokemonOfDatabase[]> {
@@ -20,7 +21,7 @@ export class PokemonService {
   }
 
   public async getAutoCompleteKeyword(keyword: string, page = 1, display = 10): Promise<string[]> {
-    const { getSearchType, getMatchedTexts } = new AutoCompleteUtil(this.pokemonRepository);
+    const { getSearchType, getMatchedTexts } = new AutoCompleteUtil(this.pokemonRepository, this.cacheManager);
     const matchedTexts = await getMatchedTexts(keyword);
     const searchType = getSearchType();
 
