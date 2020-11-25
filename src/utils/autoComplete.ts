@@ -1,14 +1,11 @@
-import { CacheStore, Logger } from '@nestjs/common';
 import { assemble, disassemble, isConsonantAll } from 'hangul-js';
-import { MongoRepository } from 'typeorm';
-import { PokemonOfDatabase } from '../pokemon/model/pokemonOfDatabase.entity';
-import { SearchType, SearchTypes } from '../pokemon/pokemon.type';
+import { PokemonNames, SearchType, SearchTypes } from '../pokemon/pokemon.type';
 
 export class AutoCompleteUtil {
-  private pokemonNames: string[];
-  private pokemonEngNames: string[];
   private searchKeyword: string;
   private searchType: SearchType;
+
+  constructor(private readonly pokemonNames: PokemonNames) {}
 
   constructor(
     private readonly pokemonRepository: MongoRepository<PokemonOfDatabase>,
