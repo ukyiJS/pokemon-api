@@ -2,5 +2,5 @@ import { Injectable, CacheOptionsFactory, CacheModuleOptions } from '@nestjs/com
 
 @Injectable()
 export class CacheService implements CacheOptionsFactory {
-  public createCacheOptions = (): CacheModuleOptions => ({ ttl: 5, max: 10 });
+  public createCacheOptions = (): CacheModuleOptions => ({ ttl: 100, max: 10 });
 }
