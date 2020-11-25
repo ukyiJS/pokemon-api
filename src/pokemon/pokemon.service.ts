@@ -20,7 +20,9 @@ export class PokemonService {
   }
 
   public async getAutoCompleteKeyword(keyword: string, page = 1, display = 10): Promise<string[]> {
-    const { searchType, matchedTexts } = await this.getMatchedTexts(keyword);
+    const { getSearchType, getMatchedTexts } = new AutoCompleteUtil(this.pokemonRepository);
+    const matchedTexts = await getMatchedTexts(keyword);
+    const searchType = getSearchType();
 
     return this.pokemonRepository
       .find({
