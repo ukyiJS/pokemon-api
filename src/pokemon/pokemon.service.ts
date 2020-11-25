@@ -1,4 +1,4 @@
-import { CacheStore, CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { CacheStore, CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindAndModifyWriteOpResultObject, MongoRepository } from 'typeorm';
 import { AutoCompleteUtil } from '../utils/autoComplete';
@@ -25,8 +25,9 @@ export class PokemonService {
   public async getPokemons({ page, display, ...pokemon }: PokemonArgs): Promise<PokemonOfDatabase[]> {
     const findCondition = <FindCondition>(<Entries<PokemonArgs>>Object.entries(pokemon)).reduce((acc, [key, value]) => {
       if (/page|display/.test(key)) return acc;
-      const findCondition = Array.isArray(value) ? { $all: value } : { [key]: new RegExp(`^${value}`, 'gi') };
-      return { ...acc, ...findCondition };
+
+      const findCondition = Array.isArray(value) ? { $all: value } : new RegExp(`^${value}`, 'gi');
+      return { ...acc, [key]: findCondition };
     }, {});
 
     return this.pokemonRepository.find({
