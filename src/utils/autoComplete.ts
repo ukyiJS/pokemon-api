@@ -24,8 +24,7 @@ export class AutoCompleteUtil {
   };
 
   private filterByKeyword = (): string[] => {
-    const pokemonNames = this.searchType === SearchTypes.NAME ? this.pokemonNames : this.pokemonEngNames;
-    return pokemonNames.filter(name => {
+    return this.pokemonNames[this.searchType].filter(name => {
       const keywordToFilter = this.disassembleText(name);
       const searchKeyword = this.disassembleText(this.searchKeyword);
       return this.equals(keywordToFilter, searchKeyword);
