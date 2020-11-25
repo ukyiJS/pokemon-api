@@ -1,12 +1,7 @@
 import { assemble, disassemble, isConsonantAll } from 'hangul-js';
-import { PokemonOfDatabase } from 'src/pokemon/model/pokemonOfDatabase.entity';
 import { MongoRepository } from 'typeorm';
-
-type SearchType = 'no' | 'name' | 'engName';
-export type MatchedTexts = {
-  matchedTexts: string[];
-  searchType: SearchType;
-};
+import { PokemonOfDatabase } from '../pokemon/model/pokemonOfDatabase.entity';
+import { MatchedTexts, SearchType, SearchTypes } from '../pokemon/pokemon.type';
 
 export class AutoCompleteUtil {
   private pokemonNoList: string[];
@@ -50,9 +45,9 @@ export class AutoCompleteUtil {
   private filterByKeyword = (searchType: SearchType): string[] => {
     const searchTexts = (() => {
       switch (searchType) {
-        case 'no':
+        case SearchTypes.NO:
           return this.pokemonNoList;
-        case 'name':
+        case SearchTypes.NAME:
           return this.pokemonNames;
         default:
           return this.pokemonEngNames;
@@ -63,7 +58,12 @@ export class AutoCompleteUtil {
 
   public getMatchedTexts = async (keyword: string): Promise<MatchedTexts> => {
     const select = <(keyof PokemonOfDatabase)[]>['no', 'name', 'engName'];
-    const searchType = (/^[0-9]/.test(keyword) && 'no') || (/^[ㄱ-ㅎ가-힣]/.test(keyword) && 'name') || 'engName';
+
+    let searchType = <SearchType>'';
+    if (/^[0-9]/.test(keyword)) searchType = SearchTypes.NO;
+    else if (/^[ㄱ-ㅎ가-힣]/.test(keyword)) searchType = SearchTypes.NAME;
+    else searchType = SearchTypes.ENG_NAME;
+
     await this.initAutoCompleteKeyword(select);
 
     this.searchKeyword = assemble(disassemble(keyword));
