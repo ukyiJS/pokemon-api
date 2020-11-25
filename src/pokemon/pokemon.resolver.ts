@@ -1,5 +1,6 @@
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
 import { FindAndModifyWriteOpResultObject } from 'typeorm';
+import { PagingArgs } from './args/paging.args';
 import { PokemonOfDatabase } from './model/pokemonOfDatabase.entity';
 import { PokemonService } from './pokemon.service';
 
@@ -13,11 +14,8 @@ export class PokemonResolver {
   }
 
   @Query(() => [PokemonOfDatabase])
-  public async getPokemons(
-    @Args('page', { type: () => Int, nullable: true }) page?: number,
-    @Args('display', { type: () => Int, nullable: true }) display?: number,
-  ): Promise<PokemonOfDatabase[]> {
-    return this.pokemonService.getPokemons(page, display);
+  public async getPokemons(@Args() pagingArgs: PagingArgs): Promise<PokemonOfDatabase[]> {
+    return this.pokemonService.getPokemons(pagingArgs);
   }
 
   @Query(() => [String])
