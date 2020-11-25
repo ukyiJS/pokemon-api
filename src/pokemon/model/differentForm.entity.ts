@@ -18,8 +18,7 @@ export class DifferentForm implements IPokemonOfDatabase {
   public species: string;
   public height: string;
   public weight: string;
-  public abilities: string[];
-  public hiddenAbility: string;
+  public abilities: (string | null)[];
   public evYield: string;
   public catchRate: number;
   public friendship: number;
