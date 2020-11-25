@@ -44,18 +44,13 @@ export class AutoCompleteUtil {
     });
   };
 
-  private filterByKeyword = (searchType: SearchType): string[] => {
-    const searchTexts = (() => {
-      switch (searchType) {
-        case SearchTypes.NO:
-          return this.pokemonNoList;
-        case SearchTypes.NAME:
-          return this.pokemonNames;
-        default:
-          return this.pokemonEngNames;
-      }
-    })();
-    return searchTexts.filter(keywordToFilter => this.equals(keywordToFilter, this.searchKeyword));
+  private filterByKeyword = (): string[] => {
+    const pokemonNames = this.searchType === SearchTypes.NAME ? this.pokemonNames : this.pokemonEngNames;
+    return pokemonNames.filter(name => {
+      const keywordToFilter = this.disassembleText(name);
+      const searchKeyword = this.disassembleText(this.searchKeyword);
+      return this.equals(keywordToFilter, searchKeyword);
+    });
   };
 
   public getMatchedTexts = async (keyword: string): Promise<MatchedTexts> => {
