@@ -6,6 +6,11 @@ import { PokemonService } from './pokemon.service';
 export class PokemonResolver {
   constructor(private readonly pokemonService: PokemonService) {}
 
+  @Query(() => PokemonOfDatabase, { nullable: true })
+  public async getPokemon(@Args('pokemonName') pokemonName: string): Promise<PokemonOfDatabase | null> {
+    return this.pokemonService.getPokemon(pokemonName);
+  }
+
   @Query(() => [PokemonOfDatabase])
   public async getPokemons(
     @Args('page', { type: () => Int, nullable: true }) page?: number,
