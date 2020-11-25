@@ -1,13 +1,17 @@
 import { Module, ValidationPipe } from '@nestjs/common';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
+import { HttpExceptionFilter } from './common';
 import { GraphqlService, TypeormService } from './config';
 import { PokemonModule } from './pokemon/pokemon.module';
 
 @Module({
-  providers: [{ provide: APP_PIPE, useClass: ValidationPipe }],
+  providers: [
+    { provide: APP_PIPE, useClass: ValidationPipe },
+    { provide: APP_FILTER, useClass: HttpExceptionFilter },
+  ],
   imports: [
     GraphQLModule.forRootAsync({ useClass: GraphqlService }),
     TypeOrmModule.forRootAsync({ useClass: TypeormService }),
