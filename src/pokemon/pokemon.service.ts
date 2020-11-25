@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindAndModifyWriteOpResultObject, MongoRepository } from 'typeorm';
 import { AutoCompleteUtil } from '../utils/autoComplete';
 import { AutoCompleteArgs } from './args/autoComplete.args';
-import { PagingArgs } from './args/paging.args';
+import { PokemonArgs } from './args/pokemon.args';
 import { PokemonOfDatabase } from './model/pokemonOfDatabase.entity';
-import { PokemonNames } from './pokemon.type';
+import { Entries, FindCondition, PokemonNames } from './pokemon.type';
 
 @Injectable()
 export class PokemonService {
@@ -22,11 +22,18 @@ export class PokemonService {
       .then(({ value }) => value);
   }
 
-  public async getPokemons({ page, display }: PagingArgs): Promise<PokemonOfDatabase[]> {
+  public async getPokemons({ page, display, ...pokemon }: PokemonArgs): Promise<PokemonOfDatabase[]> {
+    const findCondition = <FindCondition>(<Entries<PokemonArgs>>Object.entries(pokemon)).reduce((acc, [key, value]) => {
+      if (/page|display/.test(key)) return acc;
+      const findCondition = Array.isArray(value) ? { $all: value } : { [key]: new RegExp(`^${value}`, 'gi') };
+      return { ...acc, ...findCondition };
+    }, {});
+
     return this.pokemonRepository.find({
       skip: (page - 1) * display,
       take: display,
       order: { no: 'ASC' },
+      where: findCondition,
       cache: true,
     });
   }
