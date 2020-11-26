@@ -1,4 +1,5 @@
 import { ArgsType, Field } from '@nestjs/graphql';
+import { PokemonType, PokemonTypes } from '../pokemon.type';
 import { PagingArgs } from './paging.args';
 
 @ArgsType()
@@ -9,8 +10,8 @@ export class PokemonArgs extends PagingArgs {
   name: string;
   @Field({ nullable: true })
   engName: string;
-  @Field(() => [String], { nullable: true })
-  types: string[];
+  @Field(() => [PokemonTypes], { nullable: true })
+  types: PokemonType[];
   @Field(() => [String], { nullable: true })
   abilities: string[];
 }
