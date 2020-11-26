@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { ObjectLiteral } from 'typeorm';
+import { PokemonModule } from '../src/pokemon/pokemon.module';
 import { AppModule } from '../src/app.module';
 import { getPokemonsQuery } from './query';
 
@@ -10,7 +11,7 @@ describe('App (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule, PokemonModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -24,7 +25,7 @@ describe('App (e2e)', () => {
   describe('GraphQL (e2e)', () => {
     const Query = (query: string, variables?: ObjectLiteral) =>
       request(app.getHttpServer())
-        .post('/graphql')
+        .post('/api/graphql')
         .send({
           variables,
           query,
