@@ -99,7 +99,6 @@ export const getPokemonsQuery = `
     form
   }
 `;
-
 export const getPokemonQuery = `
   {
     getPokemon(pokemonName: "이상해씨") {
@@ -198,5 +197,10 @@ export const getPokemonQuery = `
       step
     }
     form
+  }
+`;
+export const getAutoCompleteKeywordQuery = `
+  {
+    getAutoCompleteKeyword(keyword:"이ㅂ", display: 10)
   }
 `;
