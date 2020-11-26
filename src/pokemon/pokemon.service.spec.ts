@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { getMongoRepository, MongoRepository } from 'typeorm';
 import { TypeormService } from '../config';
+import { PokemonArgs } from './args/pokemon.args';
 import { PokemonOfDatabase } from './model/pokemonOfDatabase.entity';
 import { PokemonService } from './pokemon.service';
 
@@ -20,7 +21,7 @@ describe('PokemonService', () => {
   });
 
   it('should return pokemons', async () => {
-    const pokemons = await service.getPokemons();
+    const pokemons = await service.getPokemons(<PokemonArgs>{});
     expect(pokemons).not.toHaveLength(0);
   });
 });
