@@ -1,6 +1,6 @@
 import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CacheService } from 'src/config';
+import { CacheService } from '../config';
 import { PokemonOfDatabase } from './model/pokemonOfDatabase.entity';
 import { PokemonResolver } from './pokemon.resolver';
 import { PokemonService } from './pokemon.service';
