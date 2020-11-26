@@ -4,7 +4,7 @@ import request from 'supertest';
 import { ObjectLiteral } from 'typeorm';
 import { PokemonModule } from '../src/pokemon/pokemon.module';
 import { AppModule } from '../src/app.module';
-import { getPokemonsQuery } from './query';
+import { getPokemonQuery, getPokemonsQuery } from './query';
 
 describe('App (e2e)', () => {
   let app: INestApplication;
@@ -32,6 +32,11 @@ describe('App (e2e)', () => {
         })
         .expect(200)
         .then(({ body: { data } }) => data);
+
+    it('should return pokemon', async () => {
+      const { getPokemon } = await Query(getPokemonQuery);
+      expect(getPokemon).not.toBeNull();
+    });
 
     it('should return pokemons', async () => {
       const { getPokemons } = await Query(getPokemonsQuery);
