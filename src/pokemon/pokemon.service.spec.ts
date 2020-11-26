@@ -7,6 +7,7 @@ import { PokemonArgs } from './args/pokemon.args';
 import { PokemonOfDatabase } from './model/pokemonOfDatabase.entity';
 import { PokemonService } from './pokemon.service';
 
+jest.setTimeout(10000);
 describe('PokemonService', () => {
   let service: PokemonService;
   let repository: MongoRepository<PokemonOfDatabase>;
@@ -24,13 +25,18 @@ describe('PokemonService', () => {
     service = new PokemonService(repository);
   });
 
-  it.only('should return pokemon', async () => {
+  it('should return pokemon', async () => {
     const pokemon = await service.getPokemon('이브이');
     expect(pokemon).not.toBeUndefined();
   });
 
   it('should return pokemons', async () => {
     const pokemons = await service.getPokemons(<PokemonArgs>{});
+    expect(pokemons).not.toHaveLength(0);
+  });
+
+  it.only('should return autoComplete keyword', async () => {
+    const pokemons = await service.getAutoCompleteKeyword({ keyword: 'ㅇㅂㅇ', display: 10 });
     expect(pokemons).not.toHaveLength(0);
   });
 });
