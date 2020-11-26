@@ -1,0 +1,32 @@
+{
+  "eng": [
+    "monster",
+    "water",
+    "bug",
+    "flying",
+    "field",
+    "fairy",
+    "grass",
+    "humanLike",
+    "mineral",
+    "amorphous",
+    "ditto",
+    "dragon",
+    "undiscovered"
+  ],
+  "kor": [
+    "괴수",
+    "수중",
+    "벌레",
+    "비행",
+    "육상",
+    "요정",
+    "식물",
+    "인간형",
+    "광물",
+    "부정형",
+    "메타몽",
+    "드래곤",
+    "미발견"
+  ]
+}
