@@ -1,0 +1,15 @@
+{
+  "monster": "괴수",
+  "water": "수중",
+  "bug": "벌레",
+  "flying": "비행",
+  "field": "육상",
+  "fairy": "요정",
+  "grass": "식물",
+  "humanLike": "인간형",
+  "mineral": "광물",
+  "amorphous": "부정형",
+  "ditto": "메타몽",
+  "dragon": "드래곤",
+  "undiscovered": "미발견"
+}
