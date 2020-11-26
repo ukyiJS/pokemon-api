@@ -13,7 +13,7 @@ export class PokemonService {
 
   constructor(
     @InjectRepository(PokemonOfDatabase) private readonly pokemonRepository: MongoRepository<PokemonOfDatabase>,
-    @Inject(CACHE_MANAGER) private readonly cacheManager: CacheStore,
+    @Inject(CACHE_MANAGER) private readonly cacheManager?: CacheStore,
   ) {}
 
   public async getPokemon(pokemonName: string): Promise<FindAndModifyWriteOpResultObject> {
@@ -54,8 +54,9 @@ export class PokemonService {
         }),
         { kor: [], eng: [], count: [] },
       );
-      await this.cacheManager.set('pokemonNames', pokemonNames, { ttl: 50000 });
-      this.pokemonNames = (await this.cacheManager.get<PokemonNames>('pokemonNames'))!;
+      const cacheManager = <CacheStore>this.cacheManager;
+      await cacheManager.set('pokemonNames', pokemonNames, { ttl: 50000 });
+      this.pokemonNames = (await cacheManager.get<PokemonNames>('pokemonNames'))!;
     }
 
     const { getAutoCompleteKeyword } = new AutoCompleteUtil(this.pokemonNames);
