@@ -1,4 +1,4 @@
-import { CacheStore, CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
+import { CacheStore, CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindAndModifyWriteOpResultObject, MongoRepository } from 'typeorm';
 import { AutoCompleteUtil } from '../utils/autoComplete';
@@ -54,9 +54,8 @@ export class PokemonService {
         }),
         { kor: [], eng: [], count: [] },
       );
-      const cacheManager = <CacheStore>this.cacheManager;
-      await cacheManager.set('pokemonNames', pokemonNames, { ttl: 50000 });
-      this.pokemonNames = (await cacheManager.get<PokemonNames>('pokemonNames'))!;
+      await this.cacheManager?.set('pokemonNames', pokemonNames, { ttl: 50000 });
+      this.pokemonNames = (await this.cacheManager?.get<PokemonNames>('pokemonNames')) ?? pokemonNames;
     }
 
     const { getAutoCompleteKeyword } = new AutoCompleteUtil(this.pokemonNames);
