@@ -2,9 +2,9 @@ import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { ObjectLiteral } from 'typeorm';
-import { PokemonModule } from '../src/pokemon/pokemon.module';
 import { AppModule } from '../src/app.module';
-import { getPokemonQuery, getPokemonsQuery } from './query';
+import { PokemonModule } from '../src/pokemon/pokemon.module';
+import { getAutoCompleteKeywordQuery, getPokemonQuery, getPokemonsQuery } from './query';
 
 describe('App (e2e)', () => {
   let app: INestApplication;
@@ -26,10 +26,7 @@ describe('App (e2e)', () => {
     const Query = (query: string, variables?: ObjectLiteral) =>
       request(app.getHttpServer())
         .post('/api/graphql')
-        .send({
-          variables,
-          query,
-        })
+        .send({ variables, query })
         .expect(200)
         .then(({ body: { data } }) => data);
 
@@ -41,6 +38,11 @@ describe('App (e2e)', () => {
     it('should return pokemons', async () => {
       const { getPokemons } = await Query(getPokemonsQuery);
       expect(getPokemons).not.toHaveLength(0);
+    });
+
+    it('should return autoCompleteKeywords', async () => {
+      const { getAutoCompleteKeyword } = await Query(getAutoCompleteKeywordQuery);
+      expect(getAutoCompleteKeyword).not.toHaveLength(0);
     });
   });
 });
