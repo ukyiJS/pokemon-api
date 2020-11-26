@@ -1,0 +1,36 @@
+{
+  "eng": [
+    "thunderStone",
+    "iceStone",
+    "moonStone",
+    "fireStone",
+    "leafStone",
+    "sunStone",
+    "waterStone",
+    "galaricaCuff",
+    "galaricaWreath",
+    "shinyStone",
+    "duskStone",
+    "dawnStone",
+    "tartApple",
+    "sweetApple",
+    "crackedPot"
+  ],
+  "kor": [
+    "천둥의돌",
+    "얼음의돌",
+    "달의돌",
+    "불꽃의돌",
+    "리프의돌",
+    "태양의돌",
+    "물의돌",
+    "가라두구팔찌",
+    "가라두구머리장식",
+    "빛의돌",
+    "어둠의돌",
+    "각성의돌",
+    "새콤한 사과",
+    "달콤한 사과",
+    "깨진 포트 or 이빠진 포트"
+  ]
+}
