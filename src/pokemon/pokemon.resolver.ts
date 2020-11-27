@@ -1,4 +1,3 @@
-import { Logger } from '@nestjs/common';
 import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { FindAndModifyWriteOpResultObject } from 'typeorm';
 import { AutoCompleteArgs } from './args/autoComplete.args';
@@ -18,11 +17,6 @@ export class PokemonResolver {
   @Query(() => [PokemonOfDatabase])
   public async getPokemons(@Args({ nullable: true }) pokemonArgs: PokemonArgs): Promise<PokemonOfDatabase[]> {
     return this.pokemonService.getPokemons(pokemonArgs);
-  }
-
-  @ResolveField(() => String, { nullable: true })
-  public async hiddenAbility(@Parent() { abilities }: PokemonOfDatabase): Promise<string> {
-    return abilities[2];
   }
 
   @ResolveField(() => [String])
