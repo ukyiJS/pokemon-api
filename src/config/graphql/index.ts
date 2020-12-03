@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { GqlModuleOptions, GqlOptionsFactory } from '@nestjs/graphql';
+import { GqlModuleOptions, GqlOptionsFactory, registerEnumType } from '@nestjs/graphql';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
+import { PokemonTypes } from 'src/pokemon/enums/pokemonType.enum';
 import { ObjectLiteral } from 'typeorm';
 import { IS_OFFLINE, IS_PRODUCTION } from '../../env';
 
@@ -11,6 +12,7 @@ export class GraphqlService implements GqlOptionsFactory {
 
   constructor() {
     this.options = IS_PRODUCTION ? this.getProdOptions() : this.getDevOptions();
+    registerEnumType(PokemonTypes, { name: 'PokemonTypes' });
   }
 
   private getProdOptions = (): GqlModuleOptions => ({
