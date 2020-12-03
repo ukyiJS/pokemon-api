@@ -3,6 +3,7 @@ import { DifferentForm } from './model/differentForm.entity';
 import { EggCycle } from './model/eggCycle.entity';
 import { EvolvingTo } from './model/evolvingTo.entity';
 import { Gender } from './model/gender.entity';
+import { LanguageType } from './model/languageType.entity';
 import { Stat } from './model/stat.entity';
 import { TypeDefense } from './model/typeDefense.entity';
 
@@ -48,11 +49,8 @@ export abstract class IPokemonDatabase {
   @Field()
   no: string;
 
-  @Field()
-  name: string;
-
-  @Field()
-  engName: string;
+  @Field(() => LanguageType)
+  name: LanguageType;
 
   @Field()
   image: string;

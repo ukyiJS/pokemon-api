@@ -3,14 +3,14 @@ import { IPokemonDatabase } from '../pokemon.interface';
 import { EggCycle } from './eggCycle.entity';
 import { EvolvingTo } from './evolvingTo.entity';
 import { Gender } from './gender.entity';
+import { LanguageType } from './languageType.entity';
 import { Stat } from './stat.entity';
 import { TypeDefense } from './typeDefense.entity';
 
 @ObjectType({ implements: () => [IPokemonDatabase] })
 export class DifferentForm implements IPokemonDatabase {
   public no: string;
-  public name: string;
-  public engName: string;
+  public name: LanguageType;
   public image: string;
   public stats: Stat[];
   public types: string[];

@@ -1,13 +1,14 @@
 import { assemble, disassemble, isConsonantAll } from 'hangul-js';
-import { AutoCompleteKeyword, PokemonNames, SearchType, SearchTypes } from '../pokemon/pokemon.type';
+import { LanguageType } from '../pokemon/model/languageType.entity';
+import { AutoCompleteKeyword, PokemonName } from '../pokemon/pokemon.type';
 
 export class AutoCompleteUtil {
   private searchKeyword: string;
-  private searchType: SearchType;
+  private searchType: keyof LanguageType;
 
-  constructor(private readonly pokemonNames: PokemonNames) {}
+  constructor(private readonly pokemonNames: PokemonName[]) {}
 
-  public getSearchType = (): SearchType => this.searchType;
+  public getSearchType = (): keyof LanguageType => this.searchType;
 
   private equals = (searchText: string, regExp: string): boolean => {
     return new RegExp(`^${regExp}`, 'gi').test(searchText);
@@ -15,30 +16,27 @@ export class AutoCompleteUtil {
 
   private disassembleText = (text: string) => disassemble(text).join('');
 
-  private filterByChoSeong = (): string[] => {
-    return this.pokemonNames.kor.filter(name => {
-      const choSeongKeyword = [...name].map(text => disassemble(text)[0]).join('');
+  private filterByChoSeong = (): PokemonName[] => {
+    return this.pokemonNames.filter(({ name }) => {
+      const choSeongKeyword = [...name.kor].map(text => disassemble(text)[0]).join('');
       const searchKeyword = this.disassembleText(this.searchKeyword);
       return this.equals(choSeongKeyword, searchKeyword);
     });
   };
 
-  private filterByKeyword = (): string[] => {
-    return this.pokemonNames[this.searchType].filter(name => {
-      const keywordToFilter = this.disassembleText(name);
+  private filterByKeyword = (): PokemonName[] => {
+    return this.pokemonNames.filter(({ name }) => {
+      const keywordToFilter = this.disassembleText(name[this.searchType]);
       const searchKeyword = this.disassembleText(this.searchKeyword);
       return this.equals(keywordToFilter, searchKeyword);
     });
   };
 
   public getAutoCompleteKeyword = (keyword: string): AutoCompleteKeyword[] => {
-    this.searchType = /^[ㄱ-ㅎ가-힣]/.test(keyword) ? SearchTypes.KOR : SearchTypes.ENG;
+    this.searchType = /^[ㄱ-ㅎ가-힣]/.test(keyword) ? 'kor' : 'eng';
     this.searchKeyword = assemble(disassemble(keyword));
 
-    const matchedTexts = isConsonantAll(keyword) ? this.filterByChoSeong() : this.filterByKeyword();
-    return matchedTexts.map(result => {
-      const index = this.pokemonNames[this.searchType].findIndex(name => name === result);
-      return { result, count: this.pokemonNames.count[index] };
-    });
+    const matchedPokemons = isConsonantAll(keyword) ? this.filterByChoSeong() : this.filterByKeyword();
+    return matchedPokemons.map(({ name, searchCount }) => ({ result: name[this.searchType], searchCount }));
   };
 }

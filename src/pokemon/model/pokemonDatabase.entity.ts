@@ -5,6 +5,7 @@ import { DifferentForm } from './differentForm.entity';
 import { EggCycle } from './eggCycle.entity';
 import { EvolvingTo } from './evolvingTo.entity';
 import { Gender } from './gender.entity';
+import { LanguageType } from './languageType.entity';
 import { Stat } from './stat.entity';
 import { TypeDefense } from './typeDefense.entity';
 
@@ -16,7 +17,7 @@ export class PokemonDatabase implements IPokemonDatabase {
   @Column({ unique: true })
   public no: string;
   @Column()
-  public name: string;
+  public name: LanguageType;
   @Column()
   public engName: string;
   @Column()
