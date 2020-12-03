@@ -1,6 +1,6 @@
 import { ObjectType } from '@nestjs/graphql';
 import { Column, Entity, ObjectIdColumn } from 'typeorm';
-import { IPokemonOfDatabase } from '../pokemon.interface';
+import { IPokemonDatabase } from '../pokemon.interface';
 import { DifferentForm } from './differentForm.entity';
 import { EggCycle } from './eggCycle.entity';
 import { EvolvingTo } from './evolvingTo.entity';
@@ -9,8 +9,8 @@ import { Stat } from './stat.entity';
 import { TypeDefense } from './typeDefense.entity';
 
 @Entity()
-@ObjectType({ implements: () => [IPokemonOfDatabase] })
-export class PokemonOfDatabase implements IPokemonOfDatabase {
+@ObjectType({ implements: () => [IPokemonDatabase] })
+export class PokemonDatabase implements IPokemonDatabase {
   @ObjectIdColumn()
   public _id?: string;
   @Column({ unique: true })

@@ -4,7 +4,7 @@ import { FindAndModifyWriteOpResultObject, MongoRepository } from 'typeorm';
 import { AutoCompleteUtil } from '../utils/autoComplete';
 import { AutoCompleteArgs } from './args/autoComplete.args';
 import { PokemonArgs } from './args/pokemon.args';
-import { PokemonOfDatabase } from './model/pokemonOfDatabase.entity';
+import { PokemonDatabase } from './model/pokemonDatabase.entity';
 import { Entries, FindCondition, PokemonNames } from './pokemon.type';
 
 @Injectable()
@@ -12,7 +12,7 @@ export class PokemonService {
   private pokemonNames: PokemonNames;
 
   constructor(
-    @InjectRepository(PokemonOfDatabase) private readonly pokemonRepository: MongoRepository<PokemonOfDatabase>,
+    @InjectRepository(PokemonDatabase) private readonly pokemonRepository: MongoRepository<PokemonDatabase>,
     @Inject(CACHE_MANAGER) private readonly cacheManager?: CacheStore,
   ) {}
 
@@ -22,7 +22,7 @@ export class PokemonService {
       .then(({ value }) => value);
   }
 
-  public async getPokemons({ page, display, ...pokemon }: PokemonArgs): Promise<PokemonOfDatabase[]> {
+  public async getPokemons({ page, display, ...pokemon }: PokemonArgs): Promise<PokemonDatabase[]> {
     const findCondition = <FindCondition>(<Entries<PokemonArgs>>Object.entries(pokemon)).reduce((acc, [key, value]) => {
       if (/page|display/.test(key)) return acc;
 

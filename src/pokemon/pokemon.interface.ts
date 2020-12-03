@@ -41,7 +41,7 @@ export interface IEvolvingTo {
 }
 
 @InterfaceType()
-export abstract class IPokemonOfDatabase {
+export abstract class IPokemonDatabase {
   @Field()
   _id?: string;
 

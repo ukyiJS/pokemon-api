@@ -4,13 +4,13 @@ import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { getMongoRepository, MongoRepository } from 'typeorm';
 import { CacheService, TypeormService } from '../config';
 import { PokemonArgs } from './args/pokemon.args';
-import { PokemonOfDatabase } from './model/pokemonOfDatabase.entity';
+import { PokemonDatabase } from './model/pokemonDatabase.entity';
 import { PokemonService } from './pokemon.service';
 
 jest.setTimeout(10000);
 describe('PokemonService', () => {
   let service: PokemonService;
-  let repository: MongoRepository<PokemonOfDatabase>;
+  let repository: MongoRepository<PokemonDatabase>;
 
   beforeAll(async () => {
     await Test.createTestingModule({
@@ -18,10 +18,10 @@ describe('PokemonService', () => {
         CacheModule.registerAsync({ useClass: CacheService }),
         TypeOrmModule.forRootAsync({ useClass: TypeormService }),
       ],
-      providers: [PokemonService, { provide: getRepositoryToken(PokemonOfDatabase), useClass: MongoRepository }],
+      providers: [PokemonService, { provide: getRepositoryToken(PokemonDatabase), useClass: MongoRepository }],
     }).compile();
 
-    repository = getMongoRepository(PokemonOfDatabase);
+    repository = getMongoRepository(PokemonDatabase);
     service = new PokemonService(repository);
   });
 
