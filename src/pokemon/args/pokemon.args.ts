@@ -1,5 +1,5 @@
 import { ArgsType, Field } from '@nestjs/graphql';
-import { PokemonType, PokemonTypes } from '../pokemon.type';
+import { PokemonType, PokemonTypes } from '../enums/pokemonType.enum';
 import { PagingArgs } from './paging.args';
 
 @ArgsType()
