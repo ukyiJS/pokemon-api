@@ -5,14 +5,14 @@ import { AutoCompleteUtil } from '../utils/autoComplete';
 import { AutoCompleteArgs } from './args/autoComplete.args';
 import { PokemonArgs } from './args/pokemon.args';
 import { PokemonDatabase } from './model/pokemonDatabase.entity';
-import { Entries, FindCondition, PokemonNames } from './pokemon.type';
+import { Session, Sessions } from './model/session.entity';
+import { Entries, FindCondition, PokemonName } from './pokemon.type';
 
 @Injectable()
 export class PokemonService {
-  private pokemonNames: PokemonNames;
-
   constructor(
     @InjectRepository(PokemonDatabase) private readonly pokemonRepository: MongoRepository<PokemonDatabase>,
+    @InjectRepository(Sessions) private readonly sessionRepository: MongoRepository<Sessions>,
     @Inject(CACHE_MANAGER) private readonly cacheManager?: CacheStore,
   ) {}
 
@@ -39,30 +39,34 @@ export class PokemonService {
     });
   }
 
-  public async getAutoCompleteKeyword({ keyword, display }: AutoCompleteArgs): Promise<string[]> {
-    if (!this.pokemonNames?.kor) {
-      const pokemons = await this.pokemonRepository.find({
-        select: ['name', 'engName', 'searchCount'],
-        cache: true,
-      });
+  public async getPokemonNames(): Promise<(Pick<PokemonDatabase, 'name'> & Pick<PokemonDatabase, 'searchCount'>)[]> {
+    return this.pokemonRepository.find({
+      select: ['name', 'searchCount'],
+      cache: true,
+    });
+  }
 
-      const pokemonNames = pokemons.reduce<PokemonNames>(
-        ({ kor, eng, count }, { name, engName, searchCount }) => ({
-          kor: [...kor, name],
-          eng: [...eng, engName],
-          count: [...count, searchCount],
-        }),
-        { kor: [], eng: [], count: [] },
-      );
-      await this.cacheManager?.set('pokemonNames', pokemonNames, { ttl: 50000 });
-      this.pokemonNames = (await this.cacheManager?.get<PokemonNames>('pokemonNames')) ?? pokemonNames;
+  public async getAutoCompleteKeyword({ keyword, display }: AutoCompleteArgs, session: Session): Promise<string[]> {
+    let pokemonNames = <PokemonName[]>[];
+    const getCache = async () => this.cacheManager?.get<PokemonName[]>('pokemonNames');
+    const getSession = async () => {
+      return this.sessionRepository.findOne({ select: ['session'] }).then(result => result?.session?.pokemonNames);
+    };
+
+    if (!(await getCache())) {
+      const sessionPokemonNames = await getSession();
+      pokemonNames = sessionPokemonNames ?? (await this.getPokemonNames());
+      await this.cacheManager?.set('pokemonNames', pokemonNames, { ttl: 1000 * 60 * 60 * 24 });
+
+      if (!sessionPokemonNames) session.pokemonNames = pokemonNames;
     }
+    pokemonNames = (await getCache()) ?? pokemonNames;
 
-    const { getAutoCompleteKeyword } = new AutoCompleteUtil(this.pokemonNames);
+    const { getAutoCompleteKeyword } = new AutoCompleteUtil(pokemonNames);
 
     return getAutoCompleteKeyword(keyword)
       .filter((_, i) => i <= display)
-      .sort((a, b) => a.count - b.count)
+      .sort((a, b) => a.searchCount - b.searchCount)
       .map(({ result }) => result);
   }
 }
