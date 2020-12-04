@@ -12,6 +12,5 @@ import { PokemonService } from './pokemon.service';
     CacheModule.registerAsync({ useClass: CacheService }),
     TypeOrmModule.forFeature([PokemonDatabase, Sessions]),
   ],
-  exports: [PokemonService],
 })
 export class PokemonModule {}
