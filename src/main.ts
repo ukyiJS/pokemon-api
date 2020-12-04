@@ -1,13 +1,14 @@
 import { Logger } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { sessionStore } from './config/session';
+import { createSessionStore } from './config';
 
 const bootstrapServer = async () => {
   const app = await NestFactory.create(AppModule, { cors: true });
   const config = app.get(ConfigService);
   const port = config.get('port');
+  const sessionStore = createSessionStore(app);
 
   await app.use(sessionStore).listen(port);
 
