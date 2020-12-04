@@ -10,11 +10,9 @@ import { Entries, FindCondition, PokemonName } from './pokemon.type';
 
 @Injectable()
 export class PokemonService {
-  constructor(
-    @InjectRepository(PokemonDatabase) private readonly pokemonRepository: MongoRepository<PokemonDatabase>,
-    @InjectRepository(Sessions) private readonly sessionRepository: MongoRepository<Sessions>,
-    @Inject(CACHE_MANAGER) private readonly cacheManager?: CacheStore,
-  ) {}
+  @InjectRepository(PokemonDatabase) private readonly pokemonRepository: MongoRepository<PokemonDatabase>;
+  @InjectRepository(Sessions) private readonly sessionRepository: MongoRepository<Sessions>;
+  @Inject(CACHE_MANAGER) private readonly cacheManager?: CacheStore;
 
   public async getPokemon(pokemonName: string): Promise<FindAndModifyWriteOpResultObject> {
     return this.pokemonRepository
