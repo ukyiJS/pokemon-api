@@ -5,9 +5,9 @@ import { join } from 'path';
 
 @Injectable()
 export class TypeormService implements TypeOrmOptionsFactory {
-  private readonly configService: ConfigService;
+  constructor(private readonly configService: ConfigService) {}
 
-  async createTypeOrmOptions(): Promise<TypeOrmModuleOptions> {
+  public async createTypeOrmOptions(): Promise<TypeOrmModuleOptions> {
     return {
       type: 'mongodb',
       url: this.configService.get('database.url'),
