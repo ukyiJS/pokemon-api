@@ -10,6 +10,12 @@
 
 Pokemon API
 
+## Require env file
+
+create `.env.dev` `.env.prod`
+
+env value `DATABASE_URL` `SESSION_SECRET`
+
 ## Installation
 
 ```bash
