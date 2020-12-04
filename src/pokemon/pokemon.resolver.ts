@@ -7,7 +7,7 @@ import { PokemonService } from './pokemon.service';
 
 @Resolver(() => PokemonDatabase)
 export class PokemonResolver {
-  constructor(private readonly pokemonService: PokemonService) {}
+  private readonly pokemonService: PokemonService;
 
   @Query(() => PokemonDatabase, { nullable: true })
   public async getPokemon(@Args('pokemonName') pokemonName: string): Promise<FindAndModifyWriteOpResultObject> {
