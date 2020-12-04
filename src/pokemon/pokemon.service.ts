@@ -26,6 +26,10 @@ export class PokemonService {
   public async getPokemons({ page, display, ...pokemon }: PokemonArgs): Promise<PokemonDatabase[]> {
     const findCondition = <FindCondition>(<Entries<PokemonArgs>>Object.entries(pokemon)).reduce((acc, [key, value]) => {
       if (/page|display/.test(key)) return acc;
+      if (key === 'name') {
+        const nameKey = (/^[a-z]+$/gi.test(pokemon[key]) && 'name.eng') || 'name.kor';
+        return { ...acc, [nameKey]: new RegExp(`^${value}`, 'gi') };
+      }
 
       const findCondition = Array.isArray(value) ? { $all: value } : new RegExp(`^${value}`, 'gi');
       return { ...acc, [key]: findCondition };
