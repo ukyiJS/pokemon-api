@@ -6,6 +6,7 @@ import { eventContext } from 'aws-serverless-express/middleware';
 import express from 'express';
 import { Server } from 'http';
 import { AppModule } from './app.module';
+import { createSessionStore } from './config';
 
 let cachedServer: Server;
 
@@ -13,7 +14,9 @@ const bootstrapServer = async (): Promise<Server> => {
   const expressApp = express();
   expressApp.use(eventContext());
   const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp), { cors: true });
-  await app.init();
+  const sessionStore = createSessionStore(app);
+
+  await app.use(sessionStore).init();
 
   return createServer(expressApp);
 };
