@@ -1,15 +1,10 @@
-import { object, string, number } from '@hapi/joi';
-
-enum Environment {
-  DEV = 'development',
-  PROD = 'production',
-  TEST = 'test',
-}
+import { number, object, string } from '@hapi/joi';
+import { Environments } from '../../enums';
 
 export const validationSchema = object({
   NODE_ENV: string()
-    .valid(...Object.values(Environment))
-    .default(Environment.DEV),
+    .valid(...Object.values(Environments))
+    .default(Environments.DEV),
   PORT: number().default(3000),
   SESSION_SECRET: string().required(),
   DATABASE_URL: string().required(),

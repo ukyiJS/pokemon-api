@@ -1,13 +1,9 @@
-import { INestApplication, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Logger } from '@nestjs/common';
 import ConnectMongo from 'connect-mongodb-session';
 import express from 'express';
 import session from 'express-session';
 
-export const createSessionStore = (app: INestApplication): express.RequestHandler => {
-  const config = app.get(ConfigService);
-  const url = config.get('database.url');
-  const secret = config.get('sessionSecret');
+export const createSessionStore = (url: string, secret: string): express.RequestHandler => {
   const MongoStore = ConnectMongo(session);
   const store = new MongoStore({ uri: url, collection: 'sessions' });
   store.on('error', (error: Error) => Logger.error(error.message, error.stack, error.name));

@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { APIGatewayProxyEvent, Context, ProxyResult } from 'aws-lambda';
@@ -6,7 +7,8 @@ import { eventContext } from 'aws-serverless-express/middleware';
 import express from 'express';
 import { Server } from 'http';
 import { AppModule } from './app.module';
-import { createSessionStore } from './config';
+import { createSessionStore, getEnv } from './config';
+import { writeJson } from './utils';
 
 let cachedServer: Server;
 
@@ -14,8 +16,14 @@ const bootstrapServer = async (): Promise<Server> => {
   const expressApp = express();
   expressApp.use(eventContext());
   const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp), { cors: true });
-  const sessionStore = createSessionStore(app);
 
+  const env = getEnv(app.get(ConfigService));
+  const nodeEnv = env('node');
+  const { url } = env('database');
+  const secret = env('sessionSecret');
+  const sessionStore = createSessionStore(url, secret);
+
+  writeJson({ fileName: 'env', data: { NODE_ENV: nodeEnv, DATABASE_URL: url } });
   await app.use(sessionStore).init();
 
   return createServer(expressApp);

@@ -1,8 +1,7 @@
 import { Field, Float, ObjectType } from '@nestjs/graphql';
-import { IGender } from '../pokemon.interface';
 
 @ObjectType()
-export class Gender implements IGender {
+export abstract class GenderType {
   @Field()
   public name: string;
   @Field(() => Float)

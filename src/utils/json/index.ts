@@ -1,40 +1,22 @@
 import { Logger } from '@nestjs/common';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { GetJson, MergedJson, WriteJson } from '../../types';
 
-interface GetJson {
-  dirName?: string;
-  fileName: string;
-}
-
-interface WriteJson extends GetJson {
-  data: any;
-}
-
-interface MergedJson {
-  fileNames: string[];
-  dirName?: string;
-}
-
-interface FileOptions {
-  encoding: BufferEncoding;
-  flag?: string;
-}
-
-const fileOptions = <FileOptions>{ encoding: 'utf-8' };
+const encoding = <BufferEncoding>'utf-8';
 
 export const getJson = <T>({ fileName, dirName = 'src/assets/json' }: GetJson): T | null => {
   const dir = join(process.cwd(), dirName, fileName);
   const isExists = existsSync(dir);
-  return isExists ? <T>JSON.parse(readFileSync(dir, fileOptions)) : null;
+  return isExists ? <T>JSON.parse(readFileSync(dir, encoding)) : null;
 };
 
 export const mergeJson = <T>({ fileNames, dirName = 'src/assets/json' }: MergedJson): T[] => {
   const dir = join(process.cwd(), dirName);
-  return fileNames.map<T>(json => JSON.parse(readFileSync(join(dir, json), fileOptions)));
+  return fileNames.map<T>(json => JSON.parse(readFileSync(join(dir, json), encoding)));
 };
 
-export const writeJson = ({ data, fileName, dirName = '' }: WriteJson): void => {
+export const writeJson = <T>({ data, fileName, dirName = '' }: WriteJson<T>): void => {
   const saveDir = join(process.cwd(), dirName);
   const jsonFileName = `${saveDir}/${fileName}.json`;
 

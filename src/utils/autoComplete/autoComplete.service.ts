@@ -1,17 +1,18 @@
+import { Injectable } from '@nestjs/common';
 import { assemble, disassemble, isConsonantAll } from 'hangul-js';
-import { LanguageType } from '../pokemon/model/languageType.entity';
-import { AutoCompleteKeyword, PokemonName } from '../pokemon/pokemon.type';
+import { LanguageType } from '../../pokemon/types/language.type';
+import { AutoCompleteKeyword, PokemonName } from '../../types';
 
-export class AutoCompleteUtil {
+@Injectable()
+export class AutoCompleteService {
   private searchKeyword: string;
   private searchType: keyof LanguageType;
-
-  constructor(private readonly pokemonNames: PokemonName[]) {}
+  private pokemonNames: PokemonName[];
 
   public getSearchType = (): keyof LanguageType => this.searchType;
 
   private equals = (searchText: string, regExp: string): boolean => {
-    return new RegExp(`^${regExp}`, 'gi').test(searchText);
+    return RegExp(`^${regExp}`, 'gi').test(searchText);
   };
 
   private disassembleText = (text: string) => disassemble(text).join('');
@@ -32,7 +33,9 @@ export class AutoCompleteUtil {
     });
   };
 
-  public getAutoCompleteKeyword = (keyword: string): AutoCompleteKeyword[] => {
+  public getAutoCompleteKeyword = (keyword: string, pokemonNames: PokemonName[]): AutoCompleteKeyword[] => {
+    this.pokemonNames = pokemonNames;
+
     this.searchType = /^[ㄱ-ㅎ가-힣]/.test(keyword) ? 'kor' : 'eng';
     this.searchKeyword = assemble(disassemble(keyword));
 

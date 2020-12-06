@@ -5,10 +5,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { HttpExceptionFilter, LoggingInterceptor, TimeoutInterceptor } from './common';
-import { GraphqlService, TypeormService } from './config';
-import { envConfig } from './config/env';
+import { configOptions, GraphqlService, TypeormService } from './config';
 import { PokemonModule } from './pokemon/pokemon.module';
-import { validationSchema } from './utils/validate';
 
 @Module({
   providers: [
@@ -18,13 +16,7 @@ import { validationSchema } from './utils/validate';
     { provide: APP_INTERCEPTOR, useClass: TimeoutInterceptor },
   ],
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: process.env.NODE_ENV === 'development' ? '.env.dev' : '.env.prod',
-      load: [envConfig],
-      validationSchema,
-      validationOptions: { abortEarly: true },
-    }),
+    ConfigModule.forRoot(configOptions),
     GraphQLModule.forRootAsync({ useClass: GraphqlService }),
     TypeOrmModule.forRootAsync({ useClass: TypeormService }),
     PokemonModule,

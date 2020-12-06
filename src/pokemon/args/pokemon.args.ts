@@ -8,8 +8,6 @@ export class PokemonArgs extends PagingArgs {
   no: string;
   @Field({ nullable: true })
   name: string;
-  @Field({ nullable: true })
-  engName: string;
   @Field(() => [PokemonTypes], { nullable: true })
   types: PokemonType[];
   @Field(() => [String], { nullable: true })
