@@ -11,7 +11,7 @@ export class AutoCompleteUtil {
   public getSearchType = (): keyof LanguageType => this.searchType;
 
   private equals = (searchText: string, regExp: string): boolean => {
-    return new RegExp(`^${regExp}`, 'gi').test(searchText);
+    return RegExp(`^${regExp}`, 'gi').test(searchText);
   };
 
   private disassembleText = (text: string) => disassemble(text).join('');
