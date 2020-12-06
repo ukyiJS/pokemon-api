@@ -14,7 +14,7 @@ export abstract class IPokemon {
   @Field()
   public image: string;
   @Field({ nullable: true })
-  public icon?: string;
+  public icon: string;
   @Field(() => [StatType])
   public stats: StatType[];
   @Field(() => [String])
