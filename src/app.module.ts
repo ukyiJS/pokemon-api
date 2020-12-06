@@ -6,10 +6,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { HttpExceptionFilter, LoggingInterceptor, TimeoutInterceptor } from './common';
 import { configOptions, GraphqlService, TypeormService } from './config';
+import { DateScalar } from './config/graphql/scalars/date.scalar';
 import { PokemonModule } from './pokemon/pokemon.module';
 
 @Module({
   providers: [
+    DateScalar,
     { provide: APP_PIPE, useClass: ValidationPipe },
     { provide: APP_FILTER, useClass: HttpExceptionFilter },
     { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
