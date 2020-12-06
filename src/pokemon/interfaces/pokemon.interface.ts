@@ -45,6 +45,6 @@ export abstract class IPokemon {
   public gender: GenderType[];
   @Field(() => EggCycleType)
   public eggCycle: EggCycleType;
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   public form: string | null;
 }
