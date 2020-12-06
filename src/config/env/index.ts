@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { ConfigModuleOptions } from '@nestjs/config/dist/interfaces';
-import { Environment } from 'src/enums';
+import { Environment } from '../../enums';
 import { Env } from '../../types';
 import { validationSchema } from '../../utils';
 
