@@ -30,7 +30,7 @@ export class PokemonDatabase implements IDatabaseColumn, IPokemon, IPokemonDatab
   public image: string;
   @Expose()
   @Column()
-  public icon?: string;
+  public icon: string;
   @Expose()
   @Column()
   public stats: StatType[];
