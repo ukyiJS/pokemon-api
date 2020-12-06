@@ -53,7 +53,7 @@ export class PokemonService {
 
   public getAutoCompleteKeyword = async ({ keyword, display }: AutoCompleteArgs, session: Session): Promise<string[]> => {
     let pokemonNames = <PokemonName[]>[];
-    const getCache = async () => this.cacheManager?.get<PokemonName[]>('pokemonNames');
+    const getCache = async () => this.cacheManager.get<PokemonName[]>('pokemonNames');
     const getSession = async () => {
       return this.sessionRepository.findOne({ select: ['session'] }).then(result => result?.session?.pokemonNames);
     };
@@ -61,7 +61,7 @@ export class PokemonService {
     if (!(await getCache())) {
       const sessionPokemonNames = await getSession();
       pokemonNames = sessionPokemonNames ?? (await this.getPokemonNames());
-      await this.cacheManager?.set('pokemonNames', pokemonNames, { ttl: 1000 * 60 * 60 * 24 });
+      await this.cacheManager.set('pokemonNames', pokemonNames, { ttl: 1000 * 60 * 60 * 24 });
 
       if (!sessionPokemonNames) session.pokemonNames = pokemonNames;
     }
