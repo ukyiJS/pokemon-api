@@ -1,12 +1,12 @@
 import { CacheStore, CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
-import { AutoCompleteService } from '../utils/autoComplete';
+import { Entries, FindCondition, PokemonName, Session } from '../types';
+import { AutoCompleteService } from '../utils';
 import { AutoCompleteArgs } from './args/autoComplete.args';
 import { PokemonArgs } from './args/pokemon.args';
 import { PokemonDatabase } from './model/pokemonDatabase.entity';
-import { Session, Sessions } from './model/session.entity';
-import { Entries, FindCondition, PokemonName } from './pokemon.type';
+import { Sessions } from './model/session.entity';
 
 @Injectable()
 export class PokemonService {
