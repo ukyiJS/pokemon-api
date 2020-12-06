@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { assemble, disassemble, isConsonantAll } from 'hangul-js';
-import { LanguageType } from '../../pokemon/model/languageType.entity';
-import { AutoCompleteKeyword, PokemonName } from '../../pokemon/pokemon.type';
+import { LanguageType } from '../../pokemon/types/language.type';
+import { AutoCompleteKeyword, PokemonName } from '../../types';
 
 @Injectable()
 export class AutoCompleteService {
