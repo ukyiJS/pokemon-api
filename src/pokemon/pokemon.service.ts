@@ -1,6 +1,6 @@
 import { CacheStore, CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindAndModifyWriteOpResultObject, MongoRepository } from 'typeorm';
+import { MongoRepository } from 'typeorm';
 import { AutoCompleteUtil } from '../utils/autoComplete';
 import { AutoCompleteArgs } from './args/autoComplete.args';
 import { PokemonArgs } from './args/pokemon.args';
@@ -17,7 +17,7 @@ export class PokemonService {
   @Inject(CACHE_MANAGER)
   private readonly cacheManager?: CacheStore;
 
-  public async getPokemon(pokemonName: string): Promise<FindAndModifyWriteOpResultObject> {
+  public async getPokemon(pokemonName: string): Promise<PokemonDatabase[]> {
     const keyName = `name.${/^[a-z]+$/gi.test(pokemonName) ? 'eng' : 'kor'}`;
     return this.pokemonRepository
       .findOneAndUpdate(
@@ -25,7 +25,7 @@ export class PokemonService {
         { $inc: { searchCount: 1 } },
         { returnOriginal: false },
       )
-      .then(({ value }) => value);
+      .then(({ value }) => <PokemonDatabase[]>value);
   }
 
   public async getPokemons({ page, display, ...pokemon }: PokemonArgs): Promise<PokemonDatabase[]> {
