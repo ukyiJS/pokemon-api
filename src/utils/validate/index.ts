@@ -1,5 +1,5 @@
 import { number, object, string } from '@hapi/joi';
-import { Environments } from '../../pokemon/enums/environment.enum';
+import { Environments } from '../../enums';
 
 export const validationSchema = object({
   NODE_ENV: string()
