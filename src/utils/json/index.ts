@@ -1,20 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
-
-interface GetJson {
-  dirName?: string;
-  fileName: string;
-}
-
-interface WriteJson<T> extends GetJson {
-  data: T;
-}
-
-interface MergedJson {
-  fileNames: string[];
-  dirName?: string;
-}
+import { GetJson, MergedJson, WriteJson } from '../../types';
 
 const encoding = <BufferEncoding>'utf-8';
 
