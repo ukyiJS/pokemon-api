@@ -5,7 +5,7 @@ export abstract class IDatabaseColumn {
   @Field()
   public _id?: string;
   @Field(() => Date)
-  public createdAt?: Date;
+  public createdAt: Date;
   @Field(() => Int)
-  public searchCount?: number;
+  public searchCount: number;
 }
