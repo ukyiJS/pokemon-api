@@ -1,7 +1,7 @@
 import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AutoCompleteModule } from 'src/utils';
 import { CacheService } from '../config';
+import { AutoCompleteModule } from '../utils';
 import { PokemonDatabase } from './model/pokemonDatabase.entity';
 import { Sessions } from './model/session.entity';
 import { PokemonService } from './pokemon.service';
