@@ -3,11 +3,9 @@ import { ConfigService } from '@nestjs/config';
 import { GqlModuleOptions, GqlOptionsFactory, registerEnumType } from '@nestjs/graphql';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { ObjectLiteral } from 'typeorm';
-import { Environment, Environments } from '../../pokemon/enums/environment.enum';
 import { PokemonTypes } from '../../pokemon/enums/pokemonType.enum';
+import { GraphQLOptions } from '../../types';
 import { getEnv } from '../env';
-
-type GraphQLOptions = { [mode in Exclude<Environment, Environments.TEST>]: GqlModuleOptions };
 
 @Injectable()
 export class GraphqlService implements GqlOptionsFactory {
