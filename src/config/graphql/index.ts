@@ -5,7 +5,7 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { ObjectLiteral } from 'typeorm';
 import { Environment, Environments } from '../../pokemon/enums/environment.enum';
 import { PokemonTypes } from '../../pokemon/enums/pokemonType.enum';
-import { IEnvironment } from '../env';
+import { getEnv } from '../env';
 
 type GraphQLOptions = { [mode in Exclude<Environment, Environments.TEST>]: GqlModuleOptions };
 
@@ -14,6 +14,7 @@ export class GraphqlService implements GqlOptionsFactory {
   private readonly endpoint = '/api/graphql';
   private mode: keyof GraphQLOptions;
   private options: GraphQLOptions;
+  private config = getEnv(this.configService);
 
   constructor(private readonly configService: ConfigService) {
     this.mode = <keyof GraphQLOptions>this.config('node');
@@ -23,10 +24,6 @@ export class GraphqlService implements GqlOptionsFactory {
     };
     registerEnumType(PokemonTypes, { name: 'PokemonTypes' });
   }
-
-  private config = <T extends keyof IEnvironment>(key: T): IEnvironment[T] => {
-    return this.configService.get<IEnvironment[typeof key]>(key)!;
-  };
 
   public createGqlOptions = async (): Promise<GqlModuleOptions> => {
     return {
