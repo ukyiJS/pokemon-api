@@ -61,11 +61,12 @@ export class PokemonService {
     if (!(await getCache())) {
       const sessionPokemonNames = await getSession();
       pokemonNames = sessionPokemonNames ?? (await this.getPokemonNames());
-      await this.cacheManager.set('pokemonNames', pokemonNames, { ttl: 1000 * 60 * 60 * 24 });
-
       if (!sessionPokemonNames) session.pokemonNames = pokemonNames;
+
+      await this.cacheManager.set('pokemonNames', pokemonNames, { ttl: 1000 * 60 * 60 * 24 });
     }
     pokemonNames = (await getCache()) ?? pokemonNames;
+
     return this.autoCompleteService
       .getAutoCompleteKeyword(keyword, pokemonNames)
       .filter((_, i) => i <= display)
