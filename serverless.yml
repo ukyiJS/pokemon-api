@@ -12,10 +12,7 @@ provider:
     SERVICE: ${self:service}
     STAGE: ${self:provider.stage}
     REGION: ${self:provider.region}
-    MONGODB_USER: ${self:custom.env.MONGODB_USER}
-    MONGODB_PASS: ${self:custom.env.MONGODB_PASS}
-    MONGODB_HOST: ${self:custom.env.MONGODB_HOST}
-    MONGODB_DATABASE: ${self:custom.env.MONGODB_DATABASE}
+    DATABASE_URL: ${self:custom.env.DATABASE_URL}
     MODE: 'serverless'
   apiGateway:
     shouldStartNameWithService: true
