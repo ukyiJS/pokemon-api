@@ -18,28 +18,30 @@ export class PokemonService {
   private readonly cacheManager?: CacheStore;
 
   public async getPokemon(pokemonName: string): Promise<FindAndModifyWriteOpResultObject> {
+    const keyName = `name.${/^[a-z]+$/gi.test(pokemonName) ? 'eng' : 'kor'}`;
     return this.pokemonRepository
-      .findOneAndUpdate({ name: pokemonName }, { $inc: { searchCount: 1 } }, { returnOriginal: false })
+      .findOneAndUpdate(
+        { [keyName]: RegExp(`^${pokemonName}+$`, 'i') },
+        { $inc: { searchCount: 1 } },
+        { returnOriginal: false },
+      )
       .then(({ value }) => value);
   }
 
   public async getPokemons({ page, display, ...pokemon }: PokemonArgs): Promise<PokemonDatabase[]> {
-    const findCondition = <FindCondition>(<Entries<PokemonArgs>>Object.entries(pokemon)).reduce((acc, [key, value]) => {
+    const condition = <FindCondition>(<Entries<PokemonArgs>>Object.entries(pokemon)).reduce((acc, [key, value]) => {
       if (/page|display/.test(key)) return acc;
-      if (key === 'name') {
-        const nameKey = (/^[a-z]+$/gi.test(pokemon[key]) && 'name.eng') || 'name.kor';
-        return { ...acc, [nameKey]: new RegExp(`^${value}`, 'gi') };
-      }
 
-      const findCondition = Array.isArray(value) ? { $all: value } : new RegExp(`^${value}`, 'gi');
-      return { ...acc, [key]: findCondition };
+      const keyName = key === 'name' ? `name.${/^[a-z]+$/gi.test(pokemon[key]) ? 'eng' : 'kor'}` : key;
+      const condition = Array.isArray(value) ? { $all: value } : RegExp(`^${value}`, 'gi');
+      return { ...acc, [keyName]: condition };
     }, {});
 
     return this.pokemonRepository.find({
       skip: (page - 1) * display,
       take: display,
       order: { no: 'ASC' },
-      where: findCondition,
+      where: condition,
       cache: true,
     });
   }
