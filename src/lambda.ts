@@ -8,7 +8,6 @@ import express from 'express';
 import { Server } from 'http';
 import { AppModule } from './app.module';
 import { createSessionStore, getEnv } from './config';
-import { writeJson } from './utils';
 
 let cachedServer: Server;
 
@@ -18,12 +17,10 @@ const bootstrapServer = async (): Promise<Server> => {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp), { cors: true });
 
   const env = getEnv(app.get(ConfigService));
-  const nodeEnv = env('node');
   const { url } = env('database');
   const secret = env('sessionSecret');
   const sessionStore = createSessionStore(url, secret);
 
-  writeJson({ fileName: 'env', data: { NODE_ENV: nodeEnv, DATABASE_URL: url } });
   await app.use(sessionStore).init();
 
   return createServer(expressApp);
