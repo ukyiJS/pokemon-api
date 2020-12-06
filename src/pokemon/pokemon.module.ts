@@ -1,13 +1,16 @@
 import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheService } from '../config';
-import { PokemonOfDatabase } from './model/pokemonOfDatabase.entity';
+import { PokemonDatabase } from './model/pokemonDatabase.entity';
+import { Sessions } from './model/session.entity';
 import { PokemonResolver } from './pokemon.resolver';
 import { PokemonService } from './pokemon.service';
 
 @Module({
   providers: [PokemonService, PokemonResolver],
-  imports: [CacheModule.registerAsync({ useClass: CacheService }), TypeOrmModule.forFeature([PokemonOfDatabase])],
-  exports: [PokemonService],
+  imports: [
+    CacheModule.registerAsync({ useClass: CacheService }),
+    TypeOrmModule.forFeature([PokemonDatabase, Sessions]),
+  ],
 })
 export class PokemonModule {}

@@ -1,2 +1,2 @@
 export * from './json';
-export * from './validateEnv';
+export * from './validate';

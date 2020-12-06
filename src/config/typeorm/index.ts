@@ -1,14 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { join } from 'path';
-import { MONGODB_URL } from '../../env';
 
 @Injectable()
 export class TypeormService implements TypeOrmOptionsFactory {
-  async createTypeOrmOptions(): Promise<TypeOrmModuleOptions> {
+  constructor(private readonly configService: ConfigService) {}
+
+  public async createTypeOrmOptions(): Promise<TypeOrmModuleOptions> {
     return {
       type: 'mongodb',
-      url: MONGODB_URL,
+      url: this.configService.get('database.url'),
       entities: [join(__dirname, '../../', '**/**.entity{.ts,.js}')],
       synchronize: true,
       useNewUrlParser: true,

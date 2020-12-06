@@ -46,7 +46,7 @@ export const getPokemonsQuery = `
     }
   }
 
-  fragment PokemonOfEvolvingTo on EvolvingTo {
+  fragment PokemonEvolvingTo on EvolvingTo {
     no
     name
     image
@@ -55,11 +55,11 @@ export const getPokemonsQuery = `
   }
 
   fragment EvolvingTo on EvolvingTo {
-    ...PokemonOfEvolvingTo
+    ...PokemonEvolvingTo
     evolvingTo {
-      ...PokemonOfEvolvingTo
+      ...PokemonEvolvingTo
       evolvingTo {
-        ...PokemonOfEvolvingTo
+        ...PokemonEvolvingTo
       }
     }
   }
@@ -146,7 +146,7 @@ export const getPokemonQuery = `
     }
   }
 
-  fragment PokemonOfEvolvingTo on EvolvingTo {
+  fragment PokemonEvolvingTo on EvolvingTo {
     no
     name
     image
@@ -155,11 +155,11 @@ export const getPokemonQuery = `
   }
 
   fragment EvolvingTo on EvolvingTo {
-    ...PokemonOfEvolvingTo
+    ...PokemonEvolvingTo
     evolvingTo {
-      ...PokemonOfEvolvingTo
+      ...PokemonEvolvingTo
       evolvingTo {
-        ...PokemonOfEvolvingTo
+        ...PokemonEvolvingTo
       }
     }
   }

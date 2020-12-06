@@ -10,6 +10,7 @@ export const {
   PORT = 3000,
   DOMAIN = '',
   NODE_ENV = 'development',
+  SESSION_SECRET = '',
   IS_OFFLINE,
   MONGODB_PORT = 11049,
   MONGODB_USER = '',
