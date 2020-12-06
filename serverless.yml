@@ -14,6 +14,7 @@ provider:
     STAGE: ${self:provider.stage}
     REGION: ${self:provider.region}
     DATABASE_URL: ${self:custom.env.DATABASE_URL}
+    SESSION_SECRET: ${self.custom.env.SESSION_SECRET}
     MODE: 'serverless'
   apiGateway:
     shouldStartNameWithService: true
