@@ -1,15 +1,7 @@
-import { DOMAIN, MONGODB_DATABASE, MONGODB_HOST, MONGODB_PASS, MONGODB_PORT, MONGODB_USER, NODE_ENV } from '../env';
 import { writeJson } from './json';
 
+const { NODE_ENV, DATABASE_URL } = process.env;
 writeJson({
-  data: {
-    NODE_ENV,
-    DOMAIN,
-    MONGODB_PORT,
-    MONGODB_USER,
-    MONGODB_PASS,
-    MONGODB_HOST,
-    MONGODB_DATABASE,
-  },
+  data: { NODE_ENV, DATABASE_URL },
   fileName: 'env',
 });
