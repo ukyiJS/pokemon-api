@@ -1,36 +1,22 @@
+import { ConfigService } from '@nestjs/config';
 import { ConfigModuleOptions } from '@nestjs/config/dist/interfaces';
+import { Environment } from 'src/enums';
+import { Env } from '../../types';
 import { validationSchema } from '../../utils';
 
-export interface DatabaseEnv {
-  url: string;
-}
-export interface PuppeteerEnv {
-  browserPath: string;
-  profilePath?: string;
-}
-export interface CrawlingEnv {
-  loopCount: number;
-}
-export interface Env {
-  port: number;
-  database: DatabaseEnv;
-  puppeteer: PuppeteerEnv;
-  crawling: CrawlingEnv;
-}
-
-const envConfig = (): Env => ({
+export const envConfig = (): Env => ({
+  node: <Environment>process.env.NODE_ENV!,
   port: +process.env.PORT!,
+  sessionSecret: process.env.SESSION_SECRET!,
+  isOffline: !!process.env.IS_OFFLINE,
   database: {
     url: process.env.DATABASE_URL!,
   },
-  puppeteer: {
-    browserPath: process.env.PUPPETEER_BROWSER_PATH!,
-    profilePath: process.env.PUPPETEER_PROFILE_PATH,
-  },
-  crawling: {
-    loopCount: +process.env.LOOP_COUNT!,
-  },
 });
+
+export const getEnv = (configService: ConfigService) => <T extends keyof Env>(key: T): Env[T] => {
+  return configService.get<Env[T]>(key)!;
+};
 
 export const configOptions = <ConfigModuleOptions>{
   isGlobal: true,
