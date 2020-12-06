@@ -1,27 +1,41 @@
-import { ConfigService } from '@nestjs/config';
-import { Environment } from 'src/pokemon/enums/environment.enum';
+import { ConfigModuleOptions } from '@nestjs/config/dist/interfaces';
+import { validationSchema } from '../../utils';
 
 export interface DatabaseEnv {
   url: string;
 }
-export interface IEnvironment {
-  node: Environment;
+export interface PuppeteerEnv {
+  browserPath: string;
+  profilePath?: string;
+}
+export interface CrawlingEnv {
+  loopCount: number;
+}
+export interface Env {
   port: number;
-  isOffline?: string;
-  sessionSecret: string;
   database: DatabaseEnv;
+  puppeteer: PuppeteerEnv;
+  crawling: CrawlingEnv;
 }
 
-export const envConfig = (): IEnvironment => ({
-  node: <Environment>process.env.NODE_ENV!,
+const envConfig = (): Env => ({
   port: +process.env.PORT!,
-  sessionSecret: process.env.SESSION_SECRET!,
-  isOffline: process.env.IS_OFFLINE,
   database: {
     url: process.env.DATABASE_URL!,
   },
+  puppeteer: {
+    browserPath: process.env.PUPPETEER_BROWSER_PATH!,
+    profilePath: process.env.PUPPETEER_PROFILE_PATH,
+  },
+  crawling: {
+    loopCount: +process.env.LOOP_COUNT!,
+  },
 });
 
-export const getEnv = (configService: ConfigService) => <T extends keyof IEnvironment>(key: T): IEnvironment[T] => {
-  return configService.get<IEnvironment[typeof key]>(key)!;
+export const configOptions = <ConfigModuleOptions>{
+  isGlobal: true,
+  envFilePath: process.env.NODE_ENV === 'development' ? '.env.dev' : '.env.prod',
+  load: [envConfig],
+  validationSchema,
+  validationOptions: { abortEarly: true },
 };
