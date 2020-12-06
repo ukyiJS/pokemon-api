@@ -5,7 +5,7 @@ provider:
   runtime: nodejs12.x # 사용 언어
   stage: ${opt:stage,'api'} # stage 명
   region: ap-northeast-2 # ap-northeast-1 (도쿄), ap-northeast-2 (서울)
-  memorySize: 2048 # 램
+  memorySize: 2048 # 램 사이즈 (default: 1024)
   stackName: pokemon-stack # CloudFormation stack 명
   apiName: pokemon # API Gateway 명
   environment: # lambda에서 사용될 공통 환경변수
