@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { GqlModuleOptions, GqlOptionsFactory, registerEnumType } from '@nestjs/graphql';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
-import { Environment, Environments } from 'src/pokemon/enums/environment.enum';
 import { ObjectLiteral } from 'typeorm';
+import { Environment, Environments } from '../../pokemon/enums/environment.enum';
 import { PokemonTypes } from '../../pokemon/enums/pokemonType.enum';
 import { IEnvironment } from '../env';
 
