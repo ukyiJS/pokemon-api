@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { Environment } from 'src/pokemon/enums/environment.enum';
 
 export interface DatabaseEnv {
@@ -20,3 +21,7 @@ export const envConfig = (): IEnvironment => ({
     url: process.env.DATABASE_URL!,
   },
 });
+
+export const getEnv = (configService: ConfigService) => <T extends keyof IEnvironment>(key: T): IEnvironment[T] => {
+  return configService.get<IEnvironment[typeof key]>(key)!;
+};
