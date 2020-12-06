@@ -1,4 +1,5 @@
 import { Field, Int, InterfaceType } from '@nestjs/graphql';
+import { ColorType } from '../types/color.type';
 import { EggCycleType } from '../types/eggCycle.type';
 import { GenderType } from '../types/gender.type';
 import { LanguageType } from '../types/language.type';
@@ -13,6 +14,8 @@ export abstract class IPokemon {
   public name: LanguageType;
   @Field()
   public image: string;
+  @Field(() => ColorType)
+  public color: ColorType;
   @Field({ nullable: true })
   public icon: string;
   @Field(() => [StatType])
