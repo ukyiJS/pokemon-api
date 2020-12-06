@@ -5,6 +5,7 @@ import { v4 } from 'uuid';
 import { IDatabaseColumn } from '../interfaces/databaseColumn.interface';
 import { IPokemon } from '../interfaces/pokemon.interface';
 import { IPokemonDatabase } from '../interfaces/pokemonDatabase.interface';
+import { ColorType } from '../types/color.type';
 import { EggCycleType } from '../types/eggCycle.type';
 import { EvolvingToType } from '../types/evolvingTo.type';
 import { GenderType } from '../types/gender.type';
@@ -28,6 +29,9 @@ export class PokemonDatabase implements IDatabaseColumn, IPokemon, IPokemonDatab
   @Expose()
   @Column()
   public image: string;
+  @Expose()
+  @Column()
+  public color: ColorType;
   @Expose()
   @Column()
   public icon: string;
