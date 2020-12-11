@@ -1,7 +1,8 @@
-import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { PokemonArgs } from '../args/pokemon.args';
 import { PokemonDatabase } from '../model/pokemonDatabase.entity';
 import { PokemonService } from '../pokemon.service';
+import { PokemonAndCount } from '../types/PokemonAndCount.type';
 
 @Resolver(() => PokemonDatabase)
 export class PokemonDatabaseResolver {
@@ -12,13 +13,8 @@ export class PokemonDatabaseResolver {
     return this.pokemonService.getPokemon(pokemonName);
   }
 
-  @Query(() => [PokemonDatabase])
-  public async getPokemons(@Args({ nullable: true }) pokemonArgs: PokemonArgs): Promise<PokemonDatabase[]> {
+  @Query(() => PokemonAndCount)
+  public async getPokemons(@Args({ nullable: true }) pokemonArgs: PokemonArgs): Promise<PokemonAndCount> {
     return this.pokemonService.getPokemons(pokemonArgs);
-  }
-
-  @Query(() => Int)
-  public async getPokemonCount(): Promise<number> {
-    return this.pokemonService.getPokemonCount();
   }
 }
