@@ -51,6 +51,10 @@ export class PokemonService {
     });
   };
 
+  public getPokemonCount = async (): Promise<number> => {
+    return this.pokemonRepository.count();
+  };
+
   public getAutoCompleteKeyword = async ({ keyword, display }: AutoCompleteArgs, session: Session): Promise<string[]> => {
     let pokemonNames = <PokemonName[]>[];
     const getCache = async () => this.cacheManager.get<PokemonName[]>('pokemonNames');
@@ -66,6 +70,8 @@ export class PokemonService {
       await this.cacheManager.set('pokemonNames', pokemonNames, { ttl: 1000 * 60 * 60 * 24 });
     }
     pokemonNames = (await getCache()) ?? pokemonNames;
+
+    if (!keyword) return [];
 
     return this.autoCompleteService
       .getAutoCompleteKeyword(keyword, pokemonNames)
