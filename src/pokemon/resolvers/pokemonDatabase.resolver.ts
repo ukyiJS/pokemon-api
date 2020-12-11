@@ -1,4 +1,4 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Query, Resolver } from '@nestjs/graphql';
 import { PokemonArgs } from '../args/pokemon.args';
 import { PokemonDatabase } from '../model/pokemonDatabase.entity';
 import { PokemonService } from '../pokemon.service';
@@ -15,5 +15,10 @@ export class PokemonDatabaseResolver {
   @Query(() => [PokemonDatabase])
   public async getPokemons(@Args({ nullable: true }) pokemonArgs: PokemonArgs): Promise<PokemonDatabase[]> {
     return this.pokemonService.getPokemons(pokemonArgs);
+  }
+
+  @Query(() => Int)
+  public async getPokemonCount(): Promise<number> {
+    return this.pokemonService.getPokemonCount();
   }
 }
