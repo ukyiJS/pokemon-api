@@ -7,6 +7,7 @@ import { AutoCompleteArgs } from './args/autoComplete.args';
 import { PokemonArgs } from './args/pokemon.args';
 import { PokemonDatabase } from './model/pokemonDatabase.entity';
 import { Sessions } from './model/session.entity';
+import { PokemonAndCount } from './types/PokemonAndCount.type';
 
 @Injectable()
 export class PokemonService {
@@ -26,7 +27,7 @@ export class PokemonService {
       .then(({ value }) => <PokemonDatabase[]>value);
   };
 
-  public getPokemons = async ({ page, display, ...pokemon }: PokemonArgs): Promise<PokemonDatabase[]> => {
+  public getPokemons = async ({ page, display, ...pokemon }: PokemonArgs): Promise<PokemonAndCount> => {
     const condition = <FindCondition>(<Entries<PokemonArgs>>Object.entries(pokemon)).reduce((acc, [key, value]) => {
       if (/page|display/.test(key)) return acc;
 
@@ -35,13 +36,15 @@ export class PokemonService {
       return { ...acc, [keyName]: condition };
     }, {});
 
-    return this.pokemonRepository.find({
+    const [pokemons, count] = await this.pokemonRepository.findAndCount({
       skip: (page - 1) * display,
       take: display,
       order: { no: 'ASC' },
       where: condition,
       cache: true,
     });
+
+    return { pokemon: pokemons, count };
   };
 
   public getPokemonNames = async (): Promise<Pick<PokemonDatabase, 'name' | 'searchCount'>[]> => {
@@ -49,10 +52,6 @@ export class PokemonService {
       select: ['name', 'searchCount'],
       cache: true,
     });
-  };
-
-  public getPokemonCount = async (): Promise<number> => {
-    return this.pokemonRepository.count();
   };
 
   public getAutoCompleteKeyword = async ({ keyword, display }: AutoCompleteArgs, session: Session): Promise<string[]> => {
