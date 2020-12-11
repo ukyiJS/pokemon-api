@@ -3,6 +3,6 @@ import { DisplayArgs } from './display.args';
 
 @ArgsType()
 export class AutoCompleteArgs extends DisplayArgs {
-  @Field()
+  @Field({ nullable: true })
   public keyword: string;
 }
