@@ -1,28 +1,16 @@
-import { CacheModule } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { getMongoRepository, MongoRepository } from 'typeorm';
-import { CacheService, TypeormService } from '../config';
+import { AppModule } from '../app.module';
+import { Session } from '../types';
 import { PokemonArgs } from './args/pokemon.args';
-import { PokemonDatabase } from './model/pokemonDatabase.entity';
 import { PokemonService } from './pokemon.service';
 
 jest.setTimeout(10000);
 describe('PokemonService', () => {
   let service: PokemonService;
-  let repository: MongoRepository<PokemonDatabase>;
 
   beforeAll(async () => {
-    await Test.createTestingModule({
-      imports: [
-        CacheModule.registerAsync({ useClass: CacheService }),
-        TypeOrmModule.forRootAsync({ useClass: TypeormService }),
-      ],
-      providers: [PokemonService, { provide: getRepositoryToken(PokemonDatabase), useClass: MongoRepository }],
-    }).compile();
-
-    repository = getMongoRepository(PokemonDatabase);
-    service = new PokemonService(repository);
+    const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
+    service = moduleRef.get<PokemonService>(PokemonService);
   });
 
   it('should return pokemon', async () => {
@@ -36,7 +24,7 @@ describe('PokemonService', () => {
   });
 
   it.only('should return autoComplete keyword', async () => {
-    const pokemons = await service.getAutoCompleteKeyword({ keyword: 'ㅇㅂㅇ', display: 10 });
+    const pokemons = await service.getAutoCompleteKeyword({ keyword: 'ㅇㅂㅇ', display: 10 }, <Session>{});
     expect(pokemons).not.toHaveLength(0);
   });
 });
